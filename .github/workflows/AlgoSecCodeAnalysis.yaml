@@ -1,5 +1,5 @@
 name: AlgoSec Action
-on: [pull_request]
+on: [push]
 jobs:
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
