@@ -60,6 +60,7 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        continue-on-error: true
 
       - uses: actions/github-script@v5
         if: steps.validate.outcome == 'failure'
@@ -95,6 +96,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: terraform plan -input=false -no-color
+        continue-on-error: true
 
       - uses: actions/github-script@v5
         if: steps.plan.outcome == 'failure'
