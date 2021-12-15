@@ -20,60 +20,15 @@ jobs:
       - name: Terraform Format
         id: fmt
         run: |
-          proc_output = $(terraform fmt -check)
-          proc_output="${proc_output//'%'/'%25'}"
-          proc_output="${proc_output//$'\n'/'%0A'}"
-          proc_output="${proc_output//$'\r'/'%0D'}"
-          echo "::set-output name=content::$proc_output"
+          echo '::echo::on'
+          echo 'STDOUT<<EOF' >> $GITHUB_ENV
+          terraform fmt -check >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+          echo "::set-output name=content::$GITHUB_ENV"
         continue-on-error: true
-
+      - name: display string
+        run: |
+          echo "The string is: ${{ steps.fmt.outputs.content }}"
       - run: echo stdout ${{ steps.fmt.outputs.stdout }}
       - run: echo stderr ${{ steps.fmt.outputs.stderr }}
       - run: echo exitcode ${{ steps.fmt.outputs.exitcode }}
-
-      - name: Terraform Init
-        id: init
-        working-directory: ${{env.working_directory}}
-        run: terraform init
-      
-      - name: Terraform Validate
-        id: validate
-        working-directory: ${{env.working_directory}}
-        run: terraform validate -no-color
-
-      - name: Terraform Plan
-        id: plan
-        working-directory: ${{env.working_directory}}
-        run: terraform plan -no-color
-        continue-on-error: true
-
-      - uses: actions/github-script@v5
-        env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
-            
-            <details><summary>Show Plan</summary>
-
-            \`\`\`\n
-            ${process.env.PLAN}
-            \`\`\`
-
-            </details>
-
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-      - name: Terraform Validation Status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
