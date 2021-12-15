@@ -19,7 +19,12 @@ jobs:
 
       - name: Terraform Format
         id: fmt
-        run: terraform fmt -check
+        run: |
+          proc_output = $(terraform fmt -check)
+          proc_output="${proc_output//'%'/'%25'}"
+          proc_output="${proc_output//$'\n'/'%0A'}"
+          proc_output="${proc_output//$'\r'/'%0D'}"
+          echo "::set-output name=content::$proc_output"
         continue-on-error: true
 
       - run: echo stdout ${{ steps.fmt.outputs.stdout }}
