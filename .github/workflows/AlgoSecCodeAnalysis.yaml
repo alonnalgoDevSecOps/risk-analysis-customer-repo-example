@@ -25,6 +25,34 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
+        continue-on-error: true
+
+      - uses: actions/github-script@0.9.0
+        if: steps.init.outcome == 'failure'
+        env:
+          PLAN: "terraform\n out:${{ steps.init.outputs.stdout }}\n err:${{ steps.init.outputs.stderr }}"
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+              
+              <details><summary>Show Plan</summary>
+              
+              \`\`\`\n
+              ${process.env.PLAN}
+              \`\`\`
+              
+              </details>
+              
+              *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+                
+              github.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+        run: exit 1
 
       - name: Terraform Validate
         id: validate
