@@ -12,13 +12,17 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          # terraform_version: 1.1.0:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Format
         id: fmt
         working-directory: ${{env.working_directory}}
         run: terraform fmt -check
+        continue-on-error: true
+
+      - run: echo ${{ steps.fmt.outputs.stdout }}
+      - run: echo ${{ steps.fmt.outputs.stderr }}
+      - run: echo ${{ steps.fmt.outputs.exitcode }}
 
       - name: Terraform Init
         id: init
