@@ -17,18 +17,15 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Terraform Format
+      - name: Terraform fmt
         id: fmt
-        run: |
-          echo '::echo::on'
-          echo 'STDOUT<<EOF' >> $GITHUB_ENV
-          terraform fmt -check >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-          echo "::set-output name=content::$GITHUB_ENV"
+        run: terraform fmt -check
         continue-on-error: true
-      - name: display string
-        run: |
-          echo "The string is: ${{ steps.fmt.outputs.content }}"
-      - run: echo stdout ${{ steps.fmt.outputs.stdout }}
-      - run: echo stderr ${{ steps.fmt.outputs.stderr }}
-      - run: echo exitcode ${{ steps.fmt.outputs.exitcode }}
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
