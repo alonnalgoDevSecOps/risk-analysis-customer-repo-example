@@ -4,5 +4,5 @@ jobs:
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - run: echo "Check failed ${{ job.status }}."
       - run: exit 0
