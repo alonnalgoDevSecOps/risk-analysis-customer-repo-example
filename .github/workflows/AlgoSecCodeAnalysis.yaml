@@ -91,3 +91,40 @@ jobs:
       - name: Init failed
         if: steps.validate.outcome == 'failure'
         run: exit 1
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -input=false -no-color
+
+      - uses: actions/github-script@v5
+        if: steps.plan.outcome == 'failure'
+        env:
+          PLAN: "terraform\n ${{ steps.plan.outputs.stderr }}"
+        with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              const output = `
+              #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+              #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+              #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+              <details><summary>Show Plan's errors</summary>
+              
+              \`\`\`\n
+              ${process.env.PLAN}
+              \`\`\`
+              
+              </details>
+              
+              *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+                
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              })
+      
+      - name: Init failed
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
