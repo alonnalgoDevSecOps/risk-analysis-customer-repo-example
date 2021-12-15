@@ -20,9 +20,9 @@ jobs:
         run: terraform fmt -check
         continue-on-error: true
 
-      - run: echo ${{ steps.fmt.outputs.stdout }}
-      - run: echo ${{ steps.fmt.outputs.stderr }}
-      - run: echo ${{ steps.fmt.outputs.exitcode }}
+      - run: echo stdout ${{ steps.fmt.outputs.stdout }}
+      - run: echo stderr ${{ steps.fmt.outputs.stderr }}
+      - run: echo exitcode ${{ steps.fmt.outputs.exitcode }}
 
       - name: Terraform Init
         id: init
