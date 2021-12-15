@@ -1,4 +1,6 @@
 name: AlgoSec Action
+on: [push]
+jobs:
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
     steps:
