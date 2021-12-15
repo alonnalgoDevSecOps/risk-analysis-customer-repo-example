@@ -5,4 +5,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🍏 This job's status is ${{ job.status }}."
-      - run: ext 1
+      - run: exit 0
