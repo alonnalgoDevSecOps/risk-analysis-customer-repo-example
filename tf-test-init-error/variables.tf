@@ -4,7 +4,7 @@ variable "custom_domain_name" {
 
 variable "aliases" {
   description = "Extra CNAMEs (alternate domain names), if any, for this distribution"
-  type = list(string)
+  type = "list"
   default = []
 }
 
@@ -25,7 +25,7 @@ variable "logging_bucket_prefix" {
 
 variable "allowed_methods" {
   description = "Controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin"
-  type = list(string)
+  type = "list"
   default = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
 }
 
@@ -85,7 +85,7 @@ variable "acm_certificate_arn" {
 }
 
 variable "locations" {
-  type = list(string)
+  type = "list"
   description = "The list of ISO 3166-1-alpha-2 codes for which you want CloudFront either to distribute your content (whitelist) or not distribute your content (blacklist)."
   default = []
 }
