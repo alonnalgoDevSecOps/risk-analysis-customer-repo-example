@@ -1,0 +1,5 @@
+name: AlgoSec Action
+  AlgoSec-Code-Analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🍏 This job's status is ${{ job.status }}."
