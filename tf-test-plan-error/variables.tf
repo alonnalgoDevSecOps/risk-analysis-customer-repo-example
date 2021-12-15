@@ -1,11 +1,5 @@
-variable "region" {
-  description = "YTTT"
-  default = "us-east-1"
-}
-
 variable "custom_domain_name" {
   description = "The domain name of the bucket using the s3 endpoint of the bucket's region"
-  default = "test-bucket"
 }
 
 variable "aliases" {
