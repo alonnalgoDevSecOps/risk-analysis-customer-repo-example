@@ -52,7 +52,9 @@ jobs:
                 repo: context.repo.repo,
                 body: output
               })
-        run: exit 1
+
+              exit 1
+
 
       - name: Terraform Validate
         id: validate
