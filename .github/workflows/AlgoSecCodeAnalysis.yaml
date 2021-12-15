@@ -25,12 +25,11 @@ jobs:
         id: validate
         run: terraform validate -no-color
         
-      - uses: actions/github-script@0.9.0
+      - uses: actions/github-script@v5
         if: github.event_name == 'pull_request'
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
             #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
