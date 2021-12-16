@@ -115,8 +115,8 @@ jobs:
       - name: 'End results'
         shell: bash
         run: |
-          echo fmt
-          test ${{ steps.fmt.outputs.exitcode }} -eq 0
+          #echo fmt
+          #test ${{ steps.fmt.outputs.exitcode }} -eq 0
           echo init
           test ${{ steps.init.outputs.exitcode }} -eq 0
           echo validate
