@@ -1,8 +1,3 @@
-variable "region" {
-  description = "YTTT"
-  default = "us-east-1"
-}
-
 variable "custom_domain_name" {
   description = "The domain name of the bucket using the s3 endpoint of the bucket's region"
   default = "test-bucket"
@@ -108,5 +103,5 @@ variable "origin_path" {
 
 variable "webapp_s3_bucket" {
   description = "S3 bucket name for webapp deploy"
-  default     = ""
+  default     = "this-is-a-test"
 }
