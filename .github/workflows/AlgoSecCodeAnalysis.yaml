@@ -129,6 +129,7 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+      
       - name: 'Check Teraform steps` results'
         shell: bash
         run: |
@@ -140,7 +141,7 @@ jobs:
           test ${{ steps.plan.outputs.exitcode }} -eq 0  
 
       -name: 'Analyze Terraform plan`s output'
-        if: ${{ steps.plan.outputs.exitcode }} == 0
+        #if: ${{ steps.plan.outputs.exitcode }} == 0
         shell: bash
         run: |
           // Convert terraform's stdout into the JSON's array to pass it to the Lambda
