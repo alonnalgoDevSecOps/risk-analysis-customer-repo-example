@@ -130,7 +130,7 @@ jobs:
               body: output
             })
       
-      - name: 'Check Teraform results'
+      - name: Check Teraform results
         shell: bash
         run: |
           echo init
@@ -140,7 +140,7 @@ jobs:
           echo plan
           test ${{ steps.plan.outputs.exitcode }} -eq 0  
 
-      -name: 'Analyze Terraform output'
+      -name: Analyze Terraform output
         if: ${{ steps.plan.outputs.exitcode }} == 0
         shell: bash
         run: |
