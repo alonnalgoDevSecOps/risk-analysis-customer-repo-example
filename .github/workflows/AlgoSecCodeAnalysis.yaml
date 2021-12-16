@@ -24,10 +24,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
 
-      #- name: Terraform Fmt
-        #id: fmt
-        #run: terraform fmt -check -diff
-        #continue-on-error: true
+      - name: Terraform Fmt
+        id: fmt
+        run: terraform fmt -check -diff
+        continue-on-error: true
 
       - name: Terraform Init
         id: init
@@ -48,8 +48,8 @@ jobs:
         uses: actions/github-script@v5
         if: github.event_name == 'pull_request'
         env:
-          #format_out: ${{ steps.fmt.outputs.stdout }}
-          #format_err: ${{ steps.fmt.outputs.stderr }}
+          format_out: ${{ steps.fmt.outputs.stdout }}
+          format_err: ${{ steps.fmt.outputs.stderr }}
           init_out: ${{ steps.init.outputs.stdout }}
           init_err: ${{ steps.init.outputs.stderr }}
           validate_out: ${{ steps.validate.outputs.stdout }}
@@ -59,10 +59,32 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const CODE_BLOCK = '```';
+            const fmt_result = '${{ steps.fmt.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const init_result = '${{ steps.init.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const validate_result = '${{ steps.validate.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const plan_result = '${{ steps.plan.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const output = `
+            ### ${ fmt_result } Terraform Format and Style 🎨
+            <details><summary>Logs</summary>
+            Output
+
+            ${ CODE_BLOCK }diff
+            <details>
+            <summary>Logs</summary>
+            Output
+
+            ${ CODE_BLOCK }
+            ${ process.env.format_out }
+            ${ CODE_BLOCK }
+            
+            Errors
+
+            ${ CODE_BLOCK }
+            ${ process.env.format_err }
+            ${ CODE_BLOCK }
+            
+            </details> <!-- End Format Logs -->
+
             ### ${ init_result } Terraform Initialization ⚙️
             <details><summary>Logs</summary>
             Output
