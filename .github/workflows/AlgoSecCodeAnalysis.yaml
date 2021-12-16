@@ -68,13 +68,13 @@ jobs:
             <details>
             <summary>Logs</summary>
             Output<br>
-            //${ CODE_BLOCK }
-            //${ process.env.format_out }
-            //${ CODE_BLOCK }
+            # ${ CODE_BLOCK }
+            # ${ process.env.format_out }
+            # ${ CODE_BLOCK }
             Errors
-            ${ CODE_BLOCK }
-            ${ process.env.format_err }
-            ${ CODE_BLOCK }
+            # ${ CODE_BLOCK }
+            # ${ process.env.format_err }
+            # ${ CODE_BLOCK }
             </details> 
             <!-- End Format Logs -->
             ### ${ init_result } Terraform Initialization ⚙️
