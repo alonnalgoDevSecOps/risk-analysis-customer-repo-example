@@ -17,116 +17,105 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Terraform fmt
-        id: fmt
-        run: terraform fmt -check
-        continue-on-error: true
-
-      - name: Terraform Init
-        id: init
-        run: terraform init -no-color
-        continue-on-error: true
-
-      - uses: actions/github-script@v5
-        if: steps.init.outcome == 'failure'
-        env:
-          PLAN: "terraform\n err:${{ steps.init.outputs.stderr }}"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-              
-              <details><summary>Show Initialization's errors</summary>
-              
-              \`\`\`\n
-              ${process.env.PLAN}
-              \`\`\`
-              
-              </details>
-              
-              *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-                
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-      
-      - name: Init failed
-        if: steps.init.outcome == 'failure'
-        run: exit 1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate -no-color
-        continue-on-error: true
+      - name: Terraform Fmt
+      id: fmt
+      run: terraform fmt -check -diff
+      continue-on-error: true
 
-      - uses: actions/github-script@v5
-        if: steps.validate.outcome == 'failure'
-        env:
-          PLAN: "terraform\n ${{ steps.validate.outputs.stderr }}"
-        with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const output = `#### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-              #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-              
-              <details><summary>Show Validation's errors</summary>
-              
-              \`\`\`\n
-              ${process.env.PLAN}
-              \`\`\`
-              
-              </details>
-              
-              *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-                
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-      
-      - name: Init failed
-        if: steps.validate.outcome == 'failure'
-        run: exit 1
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      continue-on-error: true
 
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -input=false -no-color
-        continue-on-error: true
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+      continue-on-error: true
 
-      - uses: actions/github-script@v5
-        if: steps.plan.outcome == 'failure'
-        env:
-          PLAN: "terraform\n ${{ steps.plan.outputs.stderr }}"
-        with:
-            github-token: ${{ secrets.GITHUB_TOKEN }}
-            script: |
-              const output = `
-              #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-              #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-              #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: true
 
-              <details><summary>Show Plan's errors</summary>
-              
-              \`\`\`\n
-              ${process.env.PLAN}
-              \`\`\`
-              
-              </details>
-              
-              *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-                
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: output
-              })
-      
-      - name: Init failed
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+    - name: Comment on PR
+      uses: actions/github-script@0.9.0
+      if: github.event_name == 'pull_request'
+      env:
+        format_out: ${{ steps.fmt.outputs.stdout }}
+        format_err: ${{ steps.fmt.outputs.stderr }}
+        init_out: ${{ steps.init.outputs.stdout }}
+        init_err: ${{ steps.init.outputs.stderr }}
+        validate_out: ${{ steps.validate.outputs.stdout }}
+        validate_err: ${{ steps.validate.outputs.stderr }}
+        plan: "${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const CODE_BLOCK = '```';
+          const fmt_result = '${{ steps.fmt.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
+          const init_result = '${{ steps.init.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
+          const validate_result = '${{ steps.validate.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
+          const plan_result = '${{ steps.plan.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
+          const output = `
+          ### ${ fmt_result } Terraform Format and Style 🎨
+          <details><summary>Logs</summary>
+          Output
+          ${ CODE_BLOCK }diff
+          ${ process.env.format_out }
+          ${ CODE_BLOCK }
+          Errors
+          ${ CODE_BLOCK }
+          ${ process.env.format_err }
+          ${ CODE_BLOCK }
+          </details> <!-- End Format Logs -->
+          ### ${ init_result } Terraform Initialization ⚙️
+          <details><summary>Logs</summary>
+          Output
+          ${ CODE_BLOCK }
+          ${ process.env.init_out }
+          ${ CODE_BLOCK }
+          Errors
+          ${ CODE_BLOCK }
+          ${ process.env.init_err }
+          ${ CODE_BLOCK }
+          </details> <!-- End Init Logs -->
+          ### ${ validate_result } Terraform Validation 🤖
+          <details><summary>Logs</summary>
+          Output
+          ${ CODE_BLOCK }
+          ${ process.env.validate_out }
+          ${ CODE_BLOCK }
+          Errors
+          ${ CODE_BLOCK }
+          ${ process.env.validate_err }
+          ${ CODE_BLOCK }
+          </details> <!-- End Validate Logs -->
+          ### ${ plan_result } Terraform Plan 📖
+          <details><summary>Logs</summary>
+          ${ CODE_BLOCK }terraform
+          ${ process.env.plan }
+          ${ CODE_BLOCK }
+          </details>
+          *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
+    - name: 'End results'
+      shell: bash
+      run: |
+        echo fmt
+        test ${{ steps.fmt.outputs.exitcode }} -eq 0
+        echo init
+        test ${{ steps.init.outputs.exitcode }} -eq 0
+        echo validate
+        test ${{ steps.validate.outputs.exitcode }} -eq 0
