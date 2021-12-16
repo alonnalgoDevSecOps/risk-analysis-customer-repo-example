@@ -24,7 +24,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
 
-      - #name: Terraform Fmt
+      #- name: Terraform Fmt
         #id: fmt
         #run: terraform fmt -check -diff
         #continue-on-error: true
