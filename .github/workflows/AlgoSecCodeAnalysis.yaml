@@ -139,11 +139,18 @@ jobs:
           echo validate ${{ steps.validate.outputs.exitcode }}
           test ${{ steps.validate.outputs.exitcode }} -eq 0
           echo plan ${{ steps.plan.outputs.exitcode }}
-          test ${{ steps.plan.outputs.exitcode }} -eq 0  
+          test ${{ steps.plan.outputs.exitcode }} -eq 0
+
+      - name: Convert Plan output to JSON
+        id: to_json
+        shell: bash
+        run: |
+          echo ${{ steps.plan.outputs.stdout }} | jq  --raw-input .  | jq --slurp .
+        continue-on-error: true
 
       - name: Analyze Terraform output
         env:
-          plan_out: ${{ steps.plan.outputs.stdout }}
+          plan_out: ${{ steps.to_json.outputs.stdout }}
         run: |
-          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':${plan_out}}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':'${plan_out}'}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
