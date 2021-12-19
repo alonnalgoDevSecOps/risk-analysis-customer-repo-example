@@ -134,11 +134,11 @@ jobs:
       - name: Check Teraform results
         shell: bash
         run: |
-          echo init
+          echo init: ${{ steps.init.outputs.exitcode }}
           test ${{ steps.init.outputs.exitcode }} -eq 0
-          echo validate
+          echo validate: ${{ steps.validate.outputs.exitcode }}
           test ${{ steps.validate.outputs.exitcode }} -eq 0
-          echo plan
+          echo plan: ${{ steps.plan.outputs.exitcode }}
           test ${{ steps.plan.outputs.exitcode }} -eq 0  
 
       - name: Analyze Terraform output
@@ -152,7 +152,7 @@ jobs:
         run: |
           ${{ steps.plan.outputs.stdout }} > /tmp/tmp.out
           ls -l /tmp/tmp.out
-          //PLAN_OUTPUT=$(cat /tmp/tmp.out | jq  --raw-input .  | jq --slurp .)
+          PLAN_OUTPUT=$(cat /tmp/tmp.out | jq  --raw-input .  | jq --slurp .)
           // echo $PLAN_OUTPUT
-          //curl -X POST -H "Content-Type: application/json" -d '{"tf_output":'"$PLAN_OUTPUT"'}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          curl -X POST -H "Content-Type: application/json" -d '{"tf_output":'"$PLAN_OUTPUT"'}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
