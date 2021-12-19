@@ -145,7 +145,7 @@ jobs:
         id: to_json
         shell: bash
         run: |
-          echo ${{ steps.plan.outputs.stdout }} | jq  --raw-input .  | jq --slurp .
+          TEST=$(echo ${{ steps.plan.outputs.stdout }} | jq  --raw-input .  | jq --slurp .)
         continue-on-error: true
 
       - name: Analyze Terraform output
