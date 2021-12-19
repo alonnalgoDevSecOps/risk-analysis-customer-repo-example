@@ -150,8 +150,9 @@ jobs:
 #        if: ${{ steps.plan.outputs.exitcode }} == 0
 #        shell: bash
         run: |
-          echo ${{ steps.plan.outputs.stdout }} > /tmp/tmp.out
-          PLAN_OUTPUT=$(cat /tmp/tmp.out | jq  --raw-input .  | jq --slurp .)
+          ${{ steps.plan.outputs.stdout }} > /tmp/tmp.out
+          ls -l /tmp/tmp.out
+          //PLAN_OUTPUT=$(cat /tmp/tmp.out | jq  --raw-input .  | jq --slurp .)
           // echo $PLAN_OUTPUT
-          curl -X POST -H "Content-Type: application/json" -d '{"tf_output":'"$PLAN_OUTPUT"'}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          //curl -X POST -H "Content-Type: application/json" -d '{"tf_output":'"$PLAN_OUTPUT"'}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
