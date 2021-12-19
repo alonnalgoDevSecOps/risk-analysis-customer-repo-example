@@ -145,5 +145,5 @@ jobs:
         env:
           plan_out: ${{ steps.plan.outputs.stdout }}
         run: |
-          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':${process.env.plan_out}}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':${plan_out}}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
