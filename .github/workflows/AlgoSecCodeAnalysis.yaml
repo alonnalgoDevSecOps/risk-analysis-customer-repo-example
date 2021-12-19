@@ -41,7 +41,7 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -input=false -no-color
         continue-on-error: true
 
       - name: Comment on PR
@@ -141,11 +141,18 @@ jobs:
           echo plan ${{ steps.plan.outputs.exitcode }}
           test ${{ steps.plan.outputs.exitcode }} -eq 0
 
+      - name: Remove New Line
+        id: plan_w_nl
+        shell: bash
+        run: |
+          echo "|${{ steps.plan.outputs.stdout }}|"|tr '\n' ' '
+
       - name: Convert Plan output to JSON
+        #There is a problem to pass multi-line text into
         id: to_json
         shell: bash
         run: |
-          TEST=$(echo ${{ steps.plan.outputs.stdout }} | jq  --raw-input .  | jq --slurp .)
+          TEST=$(echo ${{ steps.plan_w_nl.outputs.stdout }} | jq  --raw-input .  | jq --slurp .)
         continue-on-error: true
 
       - name: Analyze Terraform output
