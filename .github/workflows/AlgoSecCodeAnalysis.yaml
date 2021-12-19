@@ -144,7 +144,7 @@ jobs:
       - name: Analyze Terraform output
         shell: bash
         run: |
-          curl -X POST -H "Content-Type: application/json" -d '{"tf_output": ${{ steps.plan.outputs.stdout }}}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          curl -X POST -H "Content-Type: application/json" -d '{"tf_output": "${{ steps.plan.outputs.stdout }}"}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
 #      - name: Convert Terraform output to json
 #        uses: sergeysova/jq-action@v2
 #        if: ${{ steps.plan.outputs.exitcode }} == 0
