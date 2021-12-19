@@ -145,19 +145,20 @@ jobs:
         id: plan_w_nl
         shell: bash
         run: |
-          echo "|${{ steps.plan.outputs.stdout }}|"|tr '\n' ' '
-
-      - name: Convert Plan output to JSON
-        #There is a problem to pass multi-line text into
-        id: to_json
-        shell: bash
-        run: |
-          echo ${{ steps.plan_w_nl.outputs.stdout }} | jq  --raw-input .  | jq --slurp .
+          echo "${{ steps.plan.outputs.stdout }}"|tr '\n' ' '
         continue-on-error: true
+
+#      - name: Convert Plan output to JSON
+#        #There is a problem to pass multi-line text into
+#        id: to_json
+#        shell: bash
+#        run: |
+#          echo ${{ steps.plan_w_nl.outputs.stdout }} | jq  --raw-input .  | jq --slurp .
+#        continue-on-error: true
 
       - name: Analyze Terraform output
         env:
           plan_out: ${{ steps.to_json.outputs.stdout }}
         run: |
-          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':'${{ steps.to_json.outputs.stdout }}'}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':'${{ steps.plan_w_nl.outputs.stdout }}'}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
