@@ -144,7 +144,6 @@ jobs:
       - name: Analyze Terraform output
         env:
           plan_out: ${{ steps.plan.outputs.stdout }}
-        shell: bash
         run: |
-          curl -X POST -H "Content-Type: application/json" -d '{"tf_output":${process.env.plan_out}}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':${process.env.plan_out}}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
