@@ -152,12 +152,12 @@ jobs:
         id: to_json
         shell: bash
         run: |
-          TEST=$(echo ${{ steps.plan_w_nl.outputs.stdout }} | jq  --raw-input .  | jq --slurp .)
+          echo ${{ steps.plan_w_nl.outputs.stdout }} | jq  --raw-input .  | jq --slurp .
         continue-on-error: true
 
       - name: Analyze Terraform output
         env:
           plan_out: ${{ steps.to_json.outputs.stdout }}
         run: |
-          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':'${plan_out}'}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':'${{ steps.to_json.outputs.stdout }}'}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
