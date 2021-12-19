@@ -146,8 +146,8 @@ jobs:
           plan_out: ${{ steps.plan.outputs.stdout }}
         shell: bash
         run: |
-          ${process.env.plan_out} > /tmp/tmp.out
-          ls -l /tmp/tmp.out
-          PLAN_OUTPUT=$(cat /tmp/tmp.out | jq  --raw-input .  | jq --slurp .)
+          //${process.env.plan_out} > /tmp/tmp.out
+          //ls -l /tmp/tmp.out
+          //PLAN_OUTPUT=$(cat /tmp/tmp.out | jq  --raw-input .  | jq --slurp .)
           curl -X POST -H "Content-Type: application/json" -d '{"tf_output":test}' https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
         continue-on-error: true
