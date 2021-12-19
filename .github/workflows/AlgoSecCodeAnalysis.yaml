@@ -141,9 +141,9 @@ jobs:
           echo plan
           test ${{ steps.plan.outputs.exitcode }} -eq 0  
 
-      -name: Analyze Terraform output
-#        if: ${{ steps.plan.outputs.exitcode }} == 0
-        run: echo "Test"
+#      -name: Analyze Terraform output
+##        if: ${{ steps.plan.outputs.exitcode }} == 0
+#        run: echo "Test"
 #        shell: bash
 #        run: |
 #          echo "Test"
