@@ -152,9 +152,12 @@ jobs:
         with:
           name: ${{ github.sha }}
 
-      - name: Store plan's output into S3 file
+      - name: Store plan's output into file
         run: |
           echo ${{ steps.plan.outputs.stdout }} > /tmp/tmp.out 
+
+      - name: Copy tmp file into S3
+        run: |
           aws s3 cp /tmp/tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out
 
 #      - name: Convert Plan output to JSON
