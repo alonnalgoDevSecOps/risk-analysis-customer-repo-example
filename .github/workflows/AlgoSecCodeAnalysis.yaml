@@ -12,17 +12,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-
       - name: Configure AWS Credentials
+        #Is required for the plan's command
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
+
+      ################################ Terraform steps ################################
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
 
       - name: Terraform Fmt
         id: fmt
@@ -45,6 +48,7 @@ jobs:
         continue-on-error: true
 
       - name: Comment on PR
+        # update Pull Request by the operation status
         uses: actions/github-script@v5
         if: github.event_name == 'pull_request'
         env:
@@ -141,12 +145,16 @@ jobs:
           echo plan ${{ steps.plan.outputs.exitcode }}
           test ${{ steps.plan.outputs.exitcode }} -eq 0
 
-      - name: Remove New Line
-        id: plan_w_nl
-        shell: bash
-        run: |
-          echo "${{ steps.plan.outputs.stdout }}"|tr '\n' ' '
-        continue-on-error: true
+      ################################ Aws steps ################################
+      - name: Generate uuid for tmp file name
+        id: generate-uuid
+        uses: filipstefansson/uuid-action@v1
+        with:
+          name: ${{ gihub.sha }}
+
+      - name: Store plan's output into S3 file
+        run:|
+          echo ${{ teps.plan.outputs.stdout }} | aws s3 cp - s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out
 
 #      - name: Convert Plan output to JSON
 #        #There is a problem to pass multi-line text into
@@ -156,9 +164,9 @@ jobs:
 #          echo ${{ steps.plan_w_nl.outputs.stdout }} | jq  --raw-input .  | jq --slurp .
 #        continue-on-error: true
 
-      - name: Analyze Terraform output
-        env:
-          plan_out: ${{ steps.to_json.outputs.stdout }}
-        run: |
-          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':'${{ steps.plan_w_nl.outputs.stdout }}'}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
-        continue-on-error: true
+#      - name: Analyze Terraform output
+#        env:
+#          plan_out: ${{ steps.to_json.outputs.stdout }}
+#        run: |
+#          curl -X POST -H "Content-Type: application/json" -d "{'tf_output':'${{ steps.plan_w_nl.outputs.stdout }}'}" --url https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/webhook
+#        continue-on-error: true
