@@ -153,8 +153,9 @@ jobs:
           name: ${{ github.sha }}
 
       - name: Store plan's output into file
+        # It's required to use this way to write the plan's output into file as a result that the output is multiline text
         run: |
-          cat << EOF > tmp.txt
+          cat << EOF > tmp.out
           ${{ steps.plan.outputs.stdout }}
           EOF
 
