@@ -153,7 +153,7 @@ jobs:
           name: ${{ gihub.sha }}
 
       - name: Store plan's output into S3 file
-        run:|
+        run: |
           echo ${{ teps.plan.outputs.stdout }} | aws s3 cp - s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out
 
 #      - name: Convert Plan output to JSON
