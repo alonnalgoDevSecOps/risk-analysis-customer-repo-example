@@ -153,12 +153,16 @@ jobs:
           name: ${{ github.sha }}
 
       - name: Store plan's output into file
+        run: echo ${{ steps.plan.outputs.stdout }} > tmp.out
+
+      - name: Print tmp file
         run: |
-          echo ${{ steps.plan.outputs.stdout }} > /tmp/tmp.out 
+          pwd
+          cat tmp.out
 
       - name: Copy tmp file into S3
         run: |
-          aws s3 cp /tmp/tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out
+          aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out
 
 #      - name: Convert Plan output to JSON
 #        #There is a problem to pass multi-line text into
