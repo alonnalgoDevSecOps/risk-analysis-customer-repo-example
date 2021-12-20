@@ -4,7 +4,7 @@ jobs:
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
     env:
-      working_directory: ./tf-test
+      working_directory: ./tf-test-sg
     defaults:
       run:
         working-directory: ${{ env.working_directory }}
