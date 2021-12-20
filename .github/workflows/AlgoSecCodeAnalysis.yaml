@@ -153,7 +153,10 @@ jobs:
           name: ${{ github.sha }}
 
       - name: Store plan's output into file
-        run: echo ${{ steps.plan.outputs.stdout }} > tmp.out
+        run: |
+          cat << EOF > tmp.txt
+          ${{ steps.plan.outputs.stdout }}
+          EOF
 
       - name: Print tmp file
         run: |
