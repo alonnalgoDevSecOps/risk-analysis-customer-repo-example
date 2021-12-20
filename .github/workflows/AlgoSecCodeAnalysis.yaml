@@ -154,7 +154,8 @@ jobs:
 
       - name: Store plan's output into S3 file
         run: |
-          echo ${{ steps.plan.outputs.stdout }} | aws s3 cp - s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out
+          echo ${{ steps.plan.outputs.stdout }} > /tmp/tmp.out 
+          aws s3 cp /tmp/tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out
 
 #      - name: Convert Plan output to JSON
 #        #There is a problem to pass multi-line text into
