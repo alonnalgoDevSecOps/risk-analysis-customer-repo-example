@@ -176,7 +176,7 @@ jobs:
               then 
                 break
               else
-                sleep 10
+                sleep 30
             fi 
           done
 
