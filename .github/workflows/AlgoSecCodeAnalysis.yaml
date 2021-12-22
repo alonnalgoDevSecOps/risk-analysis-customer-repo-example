@@ -93,6 +93,8 @@ jobs:
           init_err: ${{ steps.init.outputs.stderr }}
           validate_out: ${{ steps.validate.outputs.stdout }}
           validate_err: ${{ steps.validate.outputs.stderr }}
+          analysis_out: ${{ steps.analysis_status.outputs.stdout}}
+          analysis_err: ${{ steps.analysis_status.outputs.stderr}}
           plan: "${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
