@@ -169,9 +169,9 @@ jobs:
           for(( i=1; i<=10; i++ )) 
           do 
             output=$(curl -s "https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/response?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
-            echo $output
+#            echo $output
             status=$(echo $output | jq -r '.message_found');
-            echo $status
+#            echo $status
             if [ $status = "true" ] 
               then 
                 break
@@ -179,12 +179,14 @@ jobs:
                 sleep 30
             fi 
           done
+          echo $output
 
-      - name: Comment on PR
+      - name: Comment analyze on PR
         uses: actions/github-script@v5
         env:
           analysis_out: ${{ steps.analysis_status.outputs.stdout }}
           analysis_err: ${{ steps.analysis_status.outputs.stderr }}
+          plan: "${{ steps.analysis_status.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
