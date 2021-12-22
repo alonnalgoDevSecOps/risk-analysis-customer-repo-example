@@ -75,13 +75,18 @@ jobs:
             output=$(curl -s "https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/response?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
             status=$(echo $output | jq -r '.message_found');
             if [ $status = "true" ] 
-              then 
+              then
+                result=$(echo $output | jq -r '.result');
+                echo $result
+                $result_sucess=$(echo $result | jq -r '.success')
+                $additions=$(echo $result | jq -r '.additions')
                 break
               else
                 sleep 30
             fi 
           done
           echo $output
+          echo '::set-output name=analysis_state::$status,analysis_result::$result_sucess,analysis_addons::$additions'
 
       - name: Comment on PR
         # update Pull Request by the operation status
@@ -106,7 +111,7 @@ jobs:
             const plan_result = '${{ steps.plan.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
 
-            console.log('analysis completed ${{ steps.analysis_status.outcome }} with output ${{ steps.analysis_status.outputs.stdout }}')
+            console.log('analysis completed ${{ steps.analysis_status.outcome }} with output state=${{ steps.analysis_status.outputs.analysis_state }} result=${{ steps.analysis_status.outputs.analysis_result }} additionals=${{ steps.analysis_status.outputs.analysis_addons }}')
 
             const output = `
             ### :heavy_check_mark: Terraform Format and Style 🎨
