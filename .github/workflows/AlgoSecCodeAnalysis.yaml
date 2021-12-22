@@ -88,11 +88,11 @@ jobs:
             fi 
           done
           
-          echo "The analysis process completed $result_sucess with additional information: $additions"
+          echo "The analysis process completed. \n State: $result_sucess \n With additional information: $additions\n"
           
-          echo "::set-output name=analysis_state::$($status)\n"
-          echo "::set-output name=analysis_result::$($result_sucess)\n"
-          echo "::set-output name=analysis_addons::$($additions)\n"
+          echo "::set-output name=analysis_state::$(echo $status)"
+          echo "::set-output name=analysis_result::$(echo $result_sucess)"
+          echo "::set-output name=analysis_addons::$(echo $additions)"
 #          echo "analysis_state=$status" >> $GITHUB_ENV
 #          echo "analysis_result=$result_sucess" >> $GITHUB_ENV
 #          echo "analysis_addons=$additions" >> $GITHUB_ENV
