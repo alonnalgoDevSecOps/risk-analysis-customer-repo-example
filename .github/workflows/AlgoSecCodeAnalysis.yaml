@@ -1,5 +1,5 @@
 name: AlgoSec Action
-on: [pull_request]
+on: [ pull_request ]
 jobs:
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
@@ -50,7 +50,6 @@ jobs:
       - name: Comment on PR
         # update Pull Request by the operation status
         uses: actions/github-script@v5
-        if: github.event_name == 'pull_request'
         env:
           format_out: ${{ steps.fmt.outputs.stdout }}
           format_err: ${{ steps.fmt.outputs.stderr }}
@@ -133,7 +132,7 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-      
+
 
       - name: Check Teraform results
         shell: bash
@@ -173,10 +172,46 @@ jobs:
             echo $output
             status=$(echo $output | jq -r '.message_found');
             echo $status
-            if [ $status = "false" ] 
+            if [ $status = "true" ] 
               then 
                 break
               else
                 sleep 10
             fi 
           done
+
+      - name: Comment on PR
+        uses: actions/github-script@v5
+        env:
+          analysis_out: ${{ steps.analysis_status.outputs.stdout }}
+          analysis_err: ${{ steps.analysis_status.outputs.stderr }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const CODE_BLOCK = '```';
+            const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
+            
+            const output= '
+            ###  ${ analysis_result }: Code Analysis 🎨
+            <details><summary>Logs</summary>
+            Output
+
+            ${ CODE_BLOCK }
+            ${ process.env.analysis_out }
+            ${ CODE_BLOCK }
+
+            Errors
+
+            ${ CODE_BLOCK }
+            ${ process.env.analysis_err }
+            ${ CODE_BLOCK }
+
+            </details> 
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            '
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
