@@ -164,6 +164,7 @@ jobs:
           aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
+        id: analysis_status
         shell: bash
         run: |
           for(( i=1; i<=10; i++ )) 
