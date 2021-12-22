@@ -191,7 +191,7 @@ jobs:
             const CODE_BLOCK = '```';
             const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             
-            const output= '
+            const output = `
             ###  ${ analysis_result }: Code Analysis 🎨
             <details><summary>Logs</summary>
             Output
@@ -208,7 +208,7 @@ jobs:
 
             </details> 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-            '
+            
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
