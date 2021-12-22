@@ -77,9 +77,11 @@ jobs:
             if [ $status = "true" ] 
               then
                 result=$(echo $output | jq -r '.result');
-                echo $result
-                $result_sucess=$(echo $result | jq -r '.success')
-                $additions=$(echo $result | jq -r '.additions')
+                echo "full result: $result"
+                result_sucess=$(echo $result | jq -r '.success')
+                echo "sucess: $result_sucess"
+                additions=$(echo $result | jq -r '.additions')
+                echo "additions: $additions"
                 break
               else
                 sleep 30
