@@ -164,4 +164,18 @@ jobs:
           aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
-        run: echo Wait
+        shell: bash
+        run: |
+          for(( i=1; i<=10; i++ )) 
+          do 
+            output=$(curl -s "https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/response?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }});
+            echo $output
+            status=$(echo $output | jq -r '.message_found');
+            echo $status
+            if [ $status = "false" ] 
+              then 
+                break
+              else
+                sleep 10
+            fi 
+          done
