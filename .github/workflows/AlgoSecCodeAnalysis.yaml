@@ -116,7 +116,7 @@ jobs:
             const plan_result = '${{ steps.plan.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
 
-            console.log('analysis completed ${{ steps.analysis_status.outcome }} with output state=${{ env.analysis_state }} result=${{ env.analysis_result }} additionals=${{ env.analysis_addons }}')
+            console.log('analysis completed ${{ steps.analysis_status.outputs.exitcode }}-${{ steps.analysis_status.outcome }} with output state=${{ env.analysis_state }} result=${{ env.analysis_result }} additionals=${{ env.analysis_addons }}')
 
             const output = `
             ### :heavy_check_mark: Terraform Format and Style 🎨
