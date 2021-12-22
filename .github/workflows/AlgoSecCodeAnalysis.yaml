@@ -184,11 +184,13 @@ jobs:
         env:
           analysis_out: ${{ steps.analysis_status.outputs.stdout }}
           analysis_err: ${{ steps.analysis_status.outputs.stderr }}
-          plan: "${{ steps.analysis_status.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const CODE_BLOCK = '```';
+            
+            echo analysis completed ${{ steps.analysis_status.outcome }} with output ${process.env.analysis_out}
+            
             const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             
             const output = `
