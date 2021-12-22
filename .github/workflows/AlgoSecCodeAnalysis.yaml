@@ -161,7 +161,7 @@ jobs:
 
       - name: Copy tmp file into S3
         run: |
-          aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action=${{ steps.generate-uuid.outputs.uuid }}
+          aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
         run: echo Wait
