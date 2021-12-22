@@ -88,9 +88,9 @@ jobs:
             fi 
           done
           echo $output
-          echo '::set-output name=analysis_state::$status'
-          echo '::set-output name=analysis_result::$result_sucess'
-          echo '::set-output name=analysis_addons::$additions'
+          echo "analysis_state=$status" >> $GITHUB_ENV
+          echo "analysis_result=$result_sucess" >> $GITHUB_ENV
+          echo "analysis_addons=$additions" >> $GITHUB_ENV
 
       - name: Comment on PR
         # update Pull Request by the operation status
@@ -115,7 +115,7 @@ jobs:
             const plan_result = '${{ steps.plan.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
 
-            console.log('analysis completed ${{ steps.analysis_status.outcome }} with output state=${{ steps.analysis_status.outputs.analysis_state }} result=${{ steps.analysis_status.outputs.analysis_result }} additionals=${{ steps.analysis_status.outputs.analysis_addons }}')
+            console.log('analysis completed ${{ steps.analysis_status.outcome }} with output state=${{ env.analysis_state }} result=${{ env.analysis_result }} additionals=${{ env.analysis_addons }}')
 
             const output = `
             ### :heavy_check_mark: Terraform Format and Style 🎨
