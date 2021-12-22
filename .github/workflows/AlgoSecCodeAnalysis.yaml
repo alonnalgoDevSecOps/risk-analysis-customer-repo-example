@@ -87,11 +87,15 @@ jobs:
                 sleep 30
             fi 
           done
+          
           echo "The analysis process completed $result_sucess with additional information: $additions"
           
-          echo "analysis_state=$status" >> $GITHUB_ENV
-          echo "analysis_result=$result_sucess" >> $GITHUB_ENV
-          echo "analysis_addons=$additions" >> $GITHUB_ENV
+          echo "::set-output name=analysis_state::$($status)\n"
+          echo "::set-output name=analysis_result::$($result_sucess)\n"
+          echo "::set-output name=analysis_addons::$($additions)\n"
+#          echo "analysis_state=$status" >> $GITHUB_ENV
+#          echo "analysis_result=$result_sucess" >> $GITHUB_ENV
+#          echo "analysis_addons=$additions" >> $GITHUB_ENV
 
       - name: Comment on PR
         # update Pull Request by the operation status
@@ -116,7 +120,7 @@ jobs:
             const plan_result = '${{ steps.plan.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
             const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
 
-            console.log('analysis completed ${{ steps.analysis_status.outputs.exitcode }}-${{ steps.analysis_status.outcome }} with output state=${{ env.analysis_state }} result=${{ env.analysis_result }} additionals=${{ env.analysis_addons }}')
+            console.log('analysis completed ${{ steps.analysis_status.outputs.exitcode }}-${{ steps.analysis_status.outcome }} with output state=${{ steps.analysis_status.outputs.analysis_state }} result=${{ steps.analysis_status.outputs.analysis_result }} additionals=${{ steps.analysis_status.outputs.analysis_addons }}')
 
             const output = `
             ### :heavy_check_mark: Terraform Format and Style 🎨
@@ -210,5 +214,5 @@ jobs:
           test ${{ steps.validate.outputs.exitcode }} -eq 0
           echo plan ${{ steps.plan.outputs.exitcode }}
           test ${{ steps.plan.outputs.exitcode }} -eq 0
-          echo analysis ${{ steps.analysis_status.outputs.exitcode }} - ${{ steps.plan.outputs.exitcode }}
-          # test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
+          echo analysis ${{ steps.analysis_status.exitcode }} - ${{ steps.plan.outputs.exitcode }}
+          # test ${{ steps.analysis_status.exitcode }} -eq 0
