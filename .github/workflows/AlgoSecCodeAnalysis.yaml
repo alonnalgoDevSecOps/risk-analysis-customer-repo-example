@@ -7,7 +7,7 @@ jobs:
     outputs:
       all: ${{ steps.changes.outputs.all}}
       terraform: ${{ steps.changes.outputs.terraform }}
-      matrix: ${{ steps.files.outputs.matrix }}
+      matrix: ${{ steps.changes.outputs.matrix }}
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
