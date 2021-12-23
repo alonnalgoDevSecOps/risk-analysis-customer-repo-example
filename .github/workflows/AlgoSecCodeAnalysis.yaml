@@ -32,7 +32,7 @@ jobs:
 
     steps:
       - name: Echo current folder
-        run: echo PWD
+        run: echo $PWD
 
       - name: Check changed files
         run: echo ${{needs.changedfiles.outputs.terraform}}
