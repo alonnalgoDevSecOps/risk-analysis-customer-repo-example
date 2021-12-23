@@ -63,7 +63,8 @@ jobs:
     steps:
       - name: test
         run: |
-          echo $PWD
+          ls -la
+          pwd
 #  AlgoSec-Code-Analysis:
 #    runs-on: ubuntu-latest
 #    # require the first job to have ran
