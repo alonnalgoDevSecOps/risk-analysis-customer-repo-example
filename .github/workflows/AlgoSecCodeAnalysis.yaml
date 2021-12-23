@@ -11,6 +11,7 @@ jobs:
       # Make sure we have some code to diff.
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Get changed files
         id: changes
         # Set outputs using the command.
@@ -29,7 +30,7 @@ jobs:
           #and create json to proceed them in the matrix style
           
           matrix_output="{\"include\":[ "
-          while IFS= read -r line
+          for line in in $terraform_files
           do 
             echo $line 
             dir=$(dirname $line) 
