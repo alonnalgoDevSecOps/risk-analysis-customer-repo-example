@@ -4,6 +4,7 @@ provider "aws" {
 
 variable "for_test" {
   type    = string
+  default= "test"
 }
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
