@@ -78,8 +78,8 @@ jobs:
               then
                 result=$(echo $output | jq -r '.result');
                 echo "full result: $result"
-                result_sucess=$(echo $result | jq -r '.success')
-                echo "sucess: $result_sucess"
+                result_success=$(echo $result | jq -r '.success')
+                echo "sucess: $result_success"
                 additions=$(echo $result | jq -r '.additions')
                 echo "additions: $additions"
                 break
@@ -88,7 +88,7 @@ jobs:
             fi 
           done
           
-          echo "The analysis process completed. \n State: $result_sucess \n With additional information: $additions\n"
+          echo "The analysis process completed. \n State: $result_success \n With additional information: $additions\n"
           
           if [ $result_success = "true" ]
             then
@@ -98,11 +98,11 @@ jobs:
           fi
           
           echo "::set-output name=analysis_state::${status}"
-          echo "::set-output name=analysis_result::${result_sucess}"
+          echo "::set-output name=analysis_result::${result_success}"
           echo "::set-output name=analysis_addons::${additions}"
           echo "::set-output name=exitcode::${exit_code}"
           
-          echo "::set-output name=stdout::$(echo "The analysis process was completed. \n Analyse succeeded: $result_sucess \n With additional information: $additions\n")"
+          echo "::set-output name=stdout::$(echo "The analysis process was completed. \n Analyse succeeded: $result_success \n With additional information: $additions\n")"
           
 
       - name: Comment on PR
