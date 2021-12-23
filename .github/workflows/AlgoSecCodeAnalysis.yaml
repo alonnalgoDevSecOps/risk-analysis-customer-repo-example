@@ -296,5 +296,5 @@ jobs:
           test ${{ steps.validate.outputs.exitcode }} -eq 0
           echo plan ${{ steps.plan.outputs.exitcode }}
           test ${{ steps.plan.outputs.exitcode }} -eq 0
-          echo analysis ${{ steps.analysis_status.outputs.exitcode }} - ${{ steps.plan.outputs.exitcode }}
-          # test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
+          echo analysis ${{ steps.analysis_status.outputs.exitcode }}
+          test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
