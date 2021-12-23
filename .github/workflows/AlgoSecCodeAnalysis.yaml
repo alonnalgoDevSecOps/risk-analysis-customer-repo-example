@@ -46,6 +46,12 @@ jobs:
           echo "::set-output name=matrix::${matrix_output}"
 #          echo "::set-output name=matrix::{\"include\":[{\"folder\":\"tf-test-sg\"},{\"folder\":\"tf-test\"}]}"
           #echo "::set-output name=terraform::${terraform_files}"
+  testmatrix:
+    needs: [changedfiles]
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: echo ${{ needs.changedfiles.outputs.matrix }}
 
   check_matrix:
     needs: [changedfiles]
