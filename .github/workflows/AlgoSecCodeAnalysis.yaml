@@ -35,7 +35,7 @@ jobs:
             if [[ $line == *".tf"* ]];
             then
               echo "Working line: $line" 
-              dir=$(dirname $line) 
+              dir="./"$(dirname $line) 
               echo "extracted dir: $dir"
               matrix_output="$matrix_output{\"folder\":\"$dir\"},"
             fi
