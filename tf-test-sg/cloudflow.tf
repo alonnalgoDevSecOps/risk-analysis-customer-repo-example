@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+variable "for_test" {
+  type    = string
+}
+
 variable "offices_external_ips" {
   type    = list(string)
   default = ["86.57.155.118/32", "31.154.25.138/32", "178.124.194.54/32", "18.184.229.113/32", "31.154.25.138/32", "18.184.110.55/32"]
