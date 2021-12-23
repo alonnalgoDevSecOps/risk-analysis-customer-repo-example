@@ -40,7 +40,8 @@ jobs:
           matrix_output="$matrix_output ]}"
           
           echo "Prepared working matrix: $matrix_output"
-          echo "::set-output name=matrix::${matrix_output}"
+#          $echo "::set-output name=matrix::${matrix_output}"
+          $echo "::set-output name=matrix::{\"include\":[ {{\"folder\":\"tf-test-sg\"},{\"folder\":\"tf-test\"}]}}"
           #echo "::set-output name=terraform::${terraform_files}"
 
   check_matrix:
