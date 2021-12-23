@@ -57,11 +57,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.changedfiles.outputs.matrix)}}
-    defaults:
-      run:
-        working-directory: ${{ matrix.folder }}
     steps:
+      -  name: echo
+         run: echo ${{ matrix.folder }}
+
       - name: test
+        working-directory: ${{ matrix.folder }}
         run: |
           ls -la
           pwd
