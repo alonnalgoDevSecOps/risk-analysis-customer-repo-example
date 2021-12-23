@@ -16,9 +16,9 @@ jobs:
         # Set outputs using the command.
         run: |
           echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
-          terraform_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .tf$ | xargs)"
-          echo "Changed terraform files': $terraform_files"
-          echo "::set-output name=terraform::${terraform_files}
+          terraform_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .tf$ | xargs)
+          echo "Changed terraform files: $terraform_files"
+          echo "::set-output name=terraform::${terraform_files}"
 
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
