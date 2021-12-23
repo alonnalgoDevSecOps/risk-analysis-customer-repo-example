@@ -9,6 +9,7 @@ terraform {
 
 variable "for_test" {
   type    = string
+  default= "test"
 }
 
 variable "offices_external_ips" {
