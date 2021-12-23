@@ -90,7 +90,7 @@ jobs:
           
           echo "The analysis process completed. \n State: $result_sucess \n With additional information: $additions\n"
           
-          if [ $result_success == true ]
+          if [ $result_success = "true" ]
             then
               exit_code = 0
             else
