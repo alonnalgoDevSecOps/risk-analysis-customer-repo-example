@@ -57,6 +57,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.changedfiles.outputs.matrix)}}
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
     steps:
       # Make sure we have some code to diff.
       - name: Checkout repository
