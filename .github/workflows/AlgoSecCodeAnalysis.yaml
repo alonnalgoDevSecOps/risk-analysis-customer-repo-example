@@ -32,7 +32,7 @@ jobs:
           matrix_output="{\"include\":[ "
           for line in in $terraform_files
           do 
-            if [[ "$line" == *".tf"* ]];
+            if [[ $line == *".tf"* ]];
               echo "Working line: $line" 
               dir=$(dirname $line) 
               echo "extracted dir: $dir"
@@ -44,11 +44,11 @@ jobs:
           echo "Prepared working matrix: $matrix_output"
           echo "::set-output name=matrix::${matrix_output}"
 
-  testmatrix:
+  echomatrix:
     needs: [changedfiles]
     runs-on: ubuntu-latest
     steps:
-      - name: test
+      - name: echo
         run: echo ${{ needs.changedfiles.outputs.matrix }}
 
   check_matrix:
@@ -56,10 +56,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.changedfiles.outputs.matrix)}}
+    defaults:
+      run:
+        working-directory: ${{ matrix.folder }}
     steps:
       - name: test
         run: |
-          echo ${{ matrix.folder }}
+          echo $PWD
 #  AlgoSec-Code-Analysis:
 #    runs-on: ubuntu-latest
 #    # require the first job to have ran
