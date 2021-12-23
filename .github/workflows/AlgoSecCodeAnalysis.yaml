@@ -15,6 +15,7 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
+          echo "Base sha: ${{ github.event.pull_request.base.sha }}, sha: ${{ github.sha }}"
           echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
           terraform_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .tf$ | xargs)
           echo "Changed terraform files: $terraform_files"
