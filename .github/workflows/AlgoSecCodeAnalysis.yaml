@@ -16,18 +16,24 @@ jobs:
         # Set outputs using the command.
         run: |
           echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
-          echo "::set-output name=terraform::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .tf$ | xargs)"
+          terraform_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .tf$ | xargs)"
+          echo "Changed terraform files': $terraform_files"
+          echo "::set-output name=terraform::${terraform_files}
 
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
-      # require the first job to have ran
+    # require the first job to have ran
     needs: changedfiles
     env:
       working_directory: ./tf-test-sg
     defaults:
       run:
         working-directory: ${{ env.working_directory }}
+
     steps:
+      - name: Echo current folder
+        run: echo PWD
+
       - name: Check changed files
         run: echo ${{needs.changedfiles.outputs.terraform}}
 
