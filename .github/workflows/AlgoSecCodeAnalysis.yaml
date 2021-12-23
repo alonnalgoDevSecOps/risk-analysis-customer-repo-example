@@ -88,8 +88,6 @@ jobs:
             fi 
           done
           
-          echo "The analysis process completed. \n State: $result_success \n With additional information: $additions\n"
-          
           if [ $result_success = "true" ]
             then
               exit_code = 0
