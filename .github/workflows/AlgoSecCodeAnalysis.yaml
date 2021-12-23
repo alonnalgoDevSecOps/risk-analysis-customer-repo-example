@@ -33,6 +33,7 @@ jobs:
           for line in in $terraform_files
           do 
             if [[ $line == *".tf"* ]];
+            then
               echo "Working line: $line" 
               dir=$(dirname $line) 
               echo "extracted dir: $dir"
