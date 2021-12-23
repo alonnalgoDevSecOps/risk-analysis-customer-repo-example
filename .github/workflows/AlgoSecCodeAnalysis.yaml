@@ -85,13 +85,7 @@ jobs:
         working-directory: ${{ matrix.folder }}
 
     steps:
-      - name: Echo current folder
-        run: echo $PWD
-
-      - name: Check changed files
-        run: echo ${{needs.changedfiles.outputs.terraform}}
-
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v2
 
       - name: Configure AWS Credentials
