@@ -58,6 +58,10 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.changedfiles.outputs.matrix)}}
     steps:
+      # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       -  name: echo
          run: echo ${{ matrix.folder }}
 
