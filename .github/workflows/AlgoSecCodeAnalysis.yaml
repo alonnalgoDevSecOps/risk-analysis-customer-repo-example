@@ -43,13 +43,13 @@ jobs:
 
   check_matrix:
     needs: [changedfiles]
-    runs-on: [ ubuntu-latest ]
-      strategy:
-        matrix: ${{fromJson(needs.changedfiles.outputs.matrix)}}
-      steps:
-        - name: test
-          run: |
-            echo ${{ matrix.folder }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.changedfiles.outputs.matrix)}}
+    steps:
+      - name: test
+        run: |
+          echo ${{ matrix.folder }}
 #  AlgoSec-Code-Analysis:
 #    runs-on: ubuntu-latest
 #    # require the first job to have ran
