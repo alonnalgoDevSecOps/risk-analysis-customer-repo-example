@@ -35,7 +35,7 @@ jobs:
             echo "Working line: $line" 
             dir=$(dirname $line) 
             echo "extracted dir: $dir"
-            matrix_output="$matrix_output {\"folder\":\"$dir\"},"
+            matrix_output="$matrix_output{\"folder\":\"$dir\"},"
           done
           matrix_output="$matrix_output ]}"
           
