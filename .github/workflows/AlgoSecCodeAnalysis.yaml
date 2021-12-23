@@ -32,10 +32,10 @@ jobs:
           matrix_output="{\"include\":[ "
           for line in in $terraform_files
           do 
-            echo $line 
+            echo "Working line: $line" 
             dir=$(dirname $line) 
-            echo $dir
-            matrix_output="$matrix_output {\"folder\":$dir},"
+            echo "extracted dir: $dir"
+            matrix_output="$matrix_output {\"folder\":\"$dir\"},"
           done
           matrix_output="$matrix_output ]}"
           
