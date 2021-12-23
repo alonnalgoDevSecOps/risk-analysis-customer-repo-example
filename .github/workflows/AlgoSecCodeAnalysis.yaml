@@ -1,14 +1,36 @@
 name: AlgoSec Action
 on: [ pull_request ]
 jobs:
+  changedfiles:
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      all: ${{ steps.changes.outputs.all}}
+      terraform: ${{ steps.changes.outputs.terraform }}
+    steps:
+      # Make sure we have some code to diff.
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Get changed files
+        id: changes
+        # Set outputs using the command.
+        run: |
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+          echo "::set-output name=terraform::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .tf$ | xargs)"
+
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
+      # require the first job to have ran
+    needs: changedfiles
     env:
       working_directory: ./tf-test-sg
     defaults:
       run:
         working-directory: ${{ env.working_directory }}
     steps:
+      - name: Check changed files
+        run: echo ${{needs.changedfiles.outputs.terraform}}
+
       - name: Checkout
         uses: actions/checkout@v2
 
@@ -90,9 +112,9 @@ jobs:
           
           if [ $result_success = "true" ]
             then
-              exit_code = 0
+              exit_code=0
             else
-              exit_code = 1
+              exit_code=1
           fi
           
           echo "::set-output name=analysis_state::${status}"
@@ -102,7 +124,7 @@ jobs:
           
           echo "::set-output name=stdout::$(echo "The analysis process was completed. \n Analyse succeeded: $result_success \n With additional information: $additions\n")"
           
-
+      ################################ Update PR and complete the job ################################
       - name: Comment on PR
         # update Pull Request by the operation status
         uses: actions/github-script@v5
