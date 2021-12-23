@@ -19,7 +19,8 @@ jobs:
           git fetch origin "${{ github.base_ref }}" --depth=1
           diff_result=$(git diff --name-only "origin/${{ github.base_ref }}" ${{ github.sha }} )
           echo "Diff between origin/${{ github.base_ref }} and ${{ github.sha }}"
-          terraform_files=$(echo $diff_result | grep -o '.*\.tf$')
+          
+          terraform_files=$(echo $diff_result | tr -s '[[:space:]]' '\n' | grep -o '.*\.tf$')
           echo "Changed Terraform's files: $terraform_files"
           echo "::set-output name=terraform::${terraform_files}"
 
