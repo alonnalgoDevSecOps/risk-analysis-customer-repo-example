@@ -29,23 +29,20 @@ jobs:
           
           #extract folders where the changed teraforms files are stored
           #and create json to proceed them in the matrix style
-          
           matrix_output="{\"include\":[ "
           for line in in $terraform_files
           do 
-            echo "Working line: $line" 
-            dir=$(dirname $line) 
-            echo "extracted dir: $dir"
-            matrix_output="$matrix_output{\"folder\":\"$dir\"},"
+            if [[ "$line" == *".tf"* ]];
+              echo "Working line: $line" 
+              dir=$(dirname $line) 
+              echo "extracted dir: $dir"
+              matrix_output="$matrix_output{\"folder\":\"$dir\"},"
+            fi
           done
           matrix_output="$matrix_output ]}"
           
-          #matrix_output="{\"include\":[{\"folder\":\"tf-test-sg\"},{\"folder\":\"tf-test\"}]}"
           echo "Prepared working matrix: $matrix_output"
-        
           echo "::set-output name=matrix::${matrix_output}"
-#          echo "::set-output name=matrix::{\"include\":[{\"folder\":\"tf-test-sg\"},{\"folder\":\"tf-test\"}]}"
-          #echo "::set-output name=terraform::${terraform_files}"
 
   testmatrix:
     needs: [changedfiles]
