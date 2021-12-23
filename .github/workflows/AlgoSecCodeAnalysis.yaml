@@ -28,14 +28,15 @@ jobs:
           #extract folders where the changed teraforms files are stored
           #and create json to proceed them in the matrix style
           
-          matrix_output="{\"include\":["
+          matrix_output="{\"include\":[ "
           while IFS= read -r line
           do 
             echo $line 
             dir=$(dirname $line) 
-            matrix_output=$matrix_output+"{\"folder\":$dir},"
+            echo $dir
+            matrix_output="$matrix_output {\"folder\":$dir},"
           done
-          matrix_output=$matrix_output+"]}"
+          matrix_output="$matrix_output ]}"
           
           echo "Prepared working matrix: $matrix_output"
           echo "::set-output name=matrix::${matrix_output}"
