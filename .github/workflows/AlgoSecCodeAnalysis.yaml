@@ -25,8 +25,7 @@ jobs:
           # Pull Request
           git fetch origin "${{ github.base_ref }}" --depth=1
           diff_result=$(git diff --name-only "origin/${{ github.base_ref }}" ${{ github.sha }} )
-          echo "Diff between origin/${{ github.base_ref }} and ${{ github.sha }}"
-          echo "$diff_result"
+          echo "Diff between origin/${{ github.base_ref }} and ${{ github.sha }}: $diff_result"
 
 #  AlgoSec-Code-Analysis:
 #    runs-on: ubuntu-latest
