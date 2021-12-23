@@ -16,8 +16,9 @@ jobs:
         # Set outputs using the command.
         run: |
           echo "Base sha: ${{ github.event.pull_request.base.sha }}, sha: ${{ github.sha }}"
+          echo "GITHUB_SHA ${{ env.GITHUB_SHA }}"
           echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
-          terraform_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .tf$ | xargs)
+          terraform_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -o '.*\.tf$' | xargs)
           echo "Changed terraform files: $terraform_files"
           echo "::set-output name=terraform::${terraform_files}"
 
