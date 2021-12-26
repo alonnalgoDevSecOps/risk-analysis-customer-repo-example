@@ -113,9 +113,9 @@ jobs:
         run: |
           
           status=0
-          if[[ ${{ steps.init.outputs.exitcode }} > 0 || ${{ steps.validate.outputs.exitcode }} > 0 || ${{ steps.plan.outputs.exitcode }} > 0 ]]
-          then
-            status = 1
+          if [[ ${{ steps.init.outputs.exitcode }} > 0 || ${{ steps.validate.outputs.exitcode }} > 0 || ${{ steps.plan.outputs.exitcode }} > 0 ]]
+            then
+              status=1
           fi
           
           echo "::set-output name=exitcode::${status}"
