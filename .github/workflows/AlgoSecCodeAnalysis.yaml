@@ -81,7 +81,6 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-
       - name: Terraform Fmt
         id: fmt
         run: terraform fmt -check -diff
@@ -102,15 +101,21 @@ jobs:
         run: terraform plan -input=false -no-color
         continue-on-error: true
 
+      - name: Terraform Status
+        id: status
+        run: echo "::set-output name=exitcode::$( if [[ ${{ steps.init.outputs.exitcode }} > 0 ||  ${{ steps.validate.outputs.exitcode}} > 0 || ${{ steps.plan.outputs.exitcode}} > 0 ]]; then echo 1; else echo 0; fi)"
+
 
       ################################ Aws steps ################################
       - name: Generate uuid for tmp file name
+        if: ${{ steps.status.outputs.exitcode }} == 0
         id: generate-uuid
         uses: filipstefansson/uuid-action@v1
         with:
           name: ${{ github.sha }}
 
       - name: Store plan's output into file
+        if: ${{ steps.status.outputs.exitcode }} == 0
         # It's required to use this way to write the plan's output into file as a result that the output is multiline text
         run: |
           cat << EOF > tmp.out
@@ -118,10 +123,12 @@ jobs:
           EOF
 
       - name: Copy tmp file into S3
+        if: ${{ steps.status.outputs.exitcode }} == 0
         run: |
           aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
+        if: ${{ steps.status.outputs.exitcode }} == 0
         id: analysis_status
         shell: bash
         run: |
