@@ -47,32 +47,11 @@ jobs:
 
   echomatrix:
     needs: [changedfiles]
+    if: ${{ secrets.ALGOSEC_IS_DEBUG }} == true
     runs-on: ubuntu-latest
     steps:
       - name: echo
         run: echo ${{ needs.changedfiles.outputs.matrix }}
-
-#  check_matrix:
-#    needs: [changedfiles]
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix: ${{fromJson(needs.changedfiles.outputs.matrix)}}
-#    defaults:
-#      run:
-#        working-directory: ${{ matrix.folder }}
-#    steps:
-#      # Make sure we have some code to diff.
-#      - name: Checkout repository
-#        uses: actions/checkout@v2
-#
-#      -  name: echo
-#         run: echo ${{ matrix.folder }}
-#
-#      - name: test
-##        working-directory: ${{ matrix.folder }}
-#        run: |
-#          ls -la
-#          pwd
 
   AlgoSec-Code-Analysis:
     runs-on: ubuntu-latest
