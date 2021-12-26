@@ -119,6 +119,7 @@ jobs:
 
           if [ $init_status > 0 ]
             then
+              echo Init $init_status
               status=1
           fi
           if [ -z ${validate_status} ]
@@ -136,7 +137,7 @@ jobs:
           echo "::set-output name=exitcode::${status}"
 
       - name: Echo status
-        run: echo ${{ steps.status.outputs.exitcode }}
+        run: echo Terraform running status ${{ steps.status.outputs.exitcode }}
 
       ################################ Aws steps ################################
       - name: Generate uuid for tmp file name
