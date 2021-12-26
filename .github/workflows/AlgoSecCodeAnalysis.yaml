@@ -116,8 +116,8 @@ jobs:
           validate_status=$(if [ ${{ steps.validate.outputs.exitcode }} ]; then echo ${{ steps.validate.outputs.exitcode }}; else echo 0; fi )
           plan_status=$(if [ ${{ steps.plan.outputs.exitcode }} ]; then echo ${{ steps.plan.outputs.exitcode }}; else echo 0; fi )
 
-          echo $init_status - $validate_status - $plan_status
           status=$( if [[ $init_status>0 || $validate_status>0 || $plan_status>0 ]]; then echo 1; else echo 0; fi )
+          echo status $status = $init_status - $validate_status - $plan_status
           echo "::set-output name=exitcode::${status}"
 
       - name: Echo status
