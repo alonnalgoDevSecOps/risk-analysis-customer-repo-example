@@ -122,7 +122,7 @@ jobs:
               echo Init $init_status
               status=1
           fi
-          if [ -z ${validate_status} ]
+          if [ -z ${validate_status+x} ]
           then
             echo Validate ${{ steps.validate.outputs.exitcode }}
             status = status || ${{ steps.validate.outputs.exitcode }} > 0
