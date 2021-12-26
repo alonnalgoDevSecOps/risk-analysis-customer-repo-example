@@ -52,7 +52,7 @@ jobs:
 
   echomatrix:
     needs: [changedfiles]
-    if: ${{needs.changedfiles.outputs.debug }} == true
+    if: needs.changedfiles.outputs.debug == true
     runs-on: ubuntu-latest
     steps:
       - name: echo
@@ -115,14 +115,14 @@ jobs:
 
       ################################ Aws steps ################################
       - name: Generate uuid for tmp file name
-        if: ${{ steps.status.outputs.exitcode }} == 0
+        if: steps.status.outputs.exitcode == 0
         id: generate-uuid
         uses: filipstefansson/uuid-action@v1
         with:
           name: ${{ github.sha }}
 
       - name: Store plan's output into file
-        if: ${{ steps.status.outputs.exitcode }} == 0
+        if: steps.status.outputs.exitcode == 0
         # It's required to use this way to write the plan's output into file as a result that the output is multiline text
         run: |
           cat << EOF > tmp.out
@@ -130,12 +130,12 @@ jobs:
           EOF
 
       - name: Copy tmp file into S3
-        if: ${{ steps.status.outputs.exitcode }} == 0
+        if: steps.status.outputs.exitcode == 0
         run: |
           aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
-        if: ${{ steps.status.outputs.exitcode }} == 0
+        if: steps.status.outputs.exitcode == 0
         id: analysis_status
         shell: bash
         run: |
