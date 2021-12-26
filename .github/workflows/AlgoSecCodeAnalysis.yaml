@@ -114,18 +114,20 @@ jobs:
         run: |
           status=0
           init_status=${{ steps.init.outputs.exitcode }}
+          validate_status=${{ steps.validate.outputs.exitcode }}
+          plan_status=${{ steps.plan.outputs.exitcode }}
+
           if [ $init_status > 0 ]
             then
               status=1
           fi
-          
-          if[ -z ${{ steps.validate.outputs.exitcode }} ]
+          if[ -z ${validate_status} ]
           then
             echo Validate ${{ steps.validate.outputs.exitcode }}
             status = status || ${{ steps.validate.outputs.exitcode }} > 0
           fi
           
-          if[ -z ${{ steps.plan.outputs.exitcode }} ]
+          if[ -z ${plan_status} ]
           then
             echo Plan ${{ steps.plan.outputs.exitcode }}
             status = status || ${{ steps.plan.outputs.exitcode }} > 0
