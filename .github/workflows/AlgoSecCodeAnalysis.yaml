@@ -110,15 +110,25 @@ jobs:
 
       - name: Terraform Status
         id: status
+        shell: bash
         run: |
-          
           status=0
           init_status=${{ steps.init.outputs.exitcode }}
-          validate_status=${{ steps.validate.outputs.exitcode }}
-          plan_status=${{ steps.plan.outputs.exitcode }}
-          if [[ ${init_status} > 0 || -z ${validate_status+1} > 0 || -z ${plan_status+1} > 0 ]]
+          if [ $init_status > 0 ]
             then
               status=1
+          fi
+          
+          if[ -z ${{ steps.validate.outputs.exitcode }} ]
+          then
+            echo Validate ${{ steps.validate.outputs.exitcode }}
+            status = status || ${{ steps.validate.outputs.exitcode }} > 0
+          fi
+          
+          if[ -z ${{ steps.plan.outputs.exitcode }} ]
+          then
+            echo Plan ${{ steps.plan.outputs.exitcode }}
+            status = status || ${{ steps.plan.outputs.exitcode }} > 0
           fi
           
           echo "::set-output name=exitcode::${status}"
