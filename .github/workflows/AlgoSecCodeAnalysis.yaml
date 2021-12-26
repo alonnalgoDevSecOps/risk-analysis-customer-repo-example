@@ -97,13 +97,13 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Validate
-        if: steps.init.outcome == 'failure'
+        if: steps.init.outcome != 'failure'
         id: validate
         run: terraform validate -no-color
         continue-on-error: true
 
       - name: Terraform Plan
-        if: steps.init.outcome == 'failure' && steps.validate.outcome == 'failure'
+        if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure'
         id: plan
         run: terraform plan -input=false -no-color --json
         continue-on-error: true
@@ -121,13 +121,13 @@ jobs:
             then
               status=1
           fi
-          if[ -z ${validate_status} ]
+          if [ -z ${validate_status} ]
           then
             echo Validate ${{ steps.validate.outputs.exitcode }}
             status = status || ${{ steps.validate.outputs.exitcode }} > 0
           fi
           
-          if[ -z ${plan_status} ]
+          if [ -z ${plan_status} ]
           then
             echo Plan ${{ steps.plan.outputs.exitcode }}
             status = status || ${{ steps.plan.outputs.exitcode }} > 0
