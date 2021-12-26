@@ -16,7 +16,7 @@ jobs:
 
       - name: Check debug flag
         id: check_debug
-        run: echo "::set-output debug=$(if [ -z ${{ secrets.ALGOSEC_IS_DEBUG }} ]; then echo true; else echo false; fi;)"
+        run: echo "::set-output debug=$(if [ -z ${{ secrets.ALGOSEC_IS_DEBUG }} ]; then echo false; else echo true; fi;)"
 
       - name: Get changed files
         id: changes
