@@ -122,13 +122,13 @@ jobs:
               echo Init $init_status
               status=1
           fi
-          if [ -v ${validate_status+x} ]
+          if [ -v $validate_status ]
           then
             echo Validate ${{ steps.validate.outputs.exitcode }}
             status = status || ${{ steps.validate.outputs.exitcode }} > 0
           fi
           
-          if [ -v ${plan_status} ]
+          if [ -v $plan_status ]
           then
             echo Plan ${{ steps.plan.outputs.exitcode }}
             status = status || ${{ steps.plan.outputs.exitcode }} > 0
