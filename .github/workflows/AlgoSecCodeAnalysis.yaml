@@ -110,7 +110,8 @@ jobs:
 
       - name: Terraform Status
         id: status
-        run: echo "::set-output name=exitcode::$( if [[ ${{ steps.init.outputs.exitcode }} > 0 ||  ${{ steps.validate.outputs.exitcode}} > 0 || ${{ steps.plan.outputs.exitcode}} > 0 ]]; then echo 1; else echo 0; fi)"
+#        run: echo "::set-output name=exitcode::$( if [[ ${{ steps.init.outputs.exitcode }} > 0 ||  ${{ steps.validate.outputs.exitcode}} > 0 || ${{ steps.plan.outputs.exitcode}} > 0 ]]; then echo 1; else echo 0; fi)"
+        run: echo "::set-output name=exitcode::$( if [[ ${{ steps.init.outputs.exitcode }} > 0 ]]; then echo 1; else echo 0; fi)"
 
       - name: Echo status
         run: echo ${{ steps.status.outputs.exitcode }}
