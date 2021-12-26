@@ -105,13 +105,33 @@ jobs:
       - name: Terraform Plan
         if: steps.init.outcome == 'failure' && steps.validate.outcome == 'failure'
         id: plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false -no-color --json
         continue-on-error: true
 
       - name: Terraform Status
         id: status
-#        run: echo "::set-output name=exitcode::$( if [[ ${{ steps.init.outputs.exitcode }} > 0 ||  ${{ steps.validate.outputs.exitcode}} > 0 || ${{ steps.plan.outputs.exitcode}} > 0 ]]; then echo 1; else echo 0; fi)"
-        run: echo "::set-output name=exitcode::$( if [[ ${{ steps.init.outputs.exitcode }} > 0 ]]; then echo 1; else echo 0; fi)"
+        run: |
+          
+          status=0
+          if[ -z ${{ steps.init.outputs.exitcode }} ]
+          then
+            echo Init ${{ steps.init.outputs.exitcode }}
+            status = status || ${{ steps.init.outputs.exitcode }} > 0
+          fi
+          
+          if[ -z ${{ steps.validate.outputs.exitcode }} ]
+          then
+            echo Validate ${{ steps.validate.outputs.exitcode }}
+            status = status || ${{ steps.validate.outputs.exitcode }} > 0
+          fi
+          
+          if[ -z ${{ steps.plan.outputs.exitcode }} ]
+          then
+            echo Plan ${{ steps.plan.outputs.exitcode }}
+            status = status || ${{ steps.plan.outputs.exitcode }} > 0
+          fi
+          
+          echo "::set-output name=exitcode::${status}"
 
       - name: Echo status
         run: echo ${{ steps.status.outputs.exitcode }}
