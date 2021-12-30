@@ -170,11 +170,11 @@ jobs:
           if [ $result_success = "true" ]
             then
               exit_code=0
-              outcome="failure"
+              outcome="success"
               echo "::set-output name=stdout::$(printf "The analysis process was completed successfully.\nWith additional information: $additions\n")"
             else
               exit_code=1
-              outcome="success"
+              outcome="failure"
               echo "::set-output name=stderr::$(printf "The analysis process was failed.\nWith additional information: $additions\n")"
           fi
           
