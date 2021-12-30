@@ -171,9 +171,11 @@ jobs:
             then
               exit_code=0
               outcome="failure"
+              echo "::set-output name=stdout::$(printf "The analysis process was completed successfully.\nWith additional information: $additions\n")"
             else
               exit_code=1
               outcome="success"
+              echo "::set-output name=stderr::$(printf "The analysis process was failed.\nWith additional information: $additions\n")"
           fi
           
           echo "::set-output name=analysis_state::${status}"
@@ -181,8 +183,8 @@ jobs:
           echo "::set-output name=analysis_addons::${additions}"
           echo "::set-output name=exitcode::${exit_code}"
           echo "::set-output name=outcome::${outcome}"
+          echo "::set-output name=report::${$additions}"
 
-          echo "::set-output name=stdout::$(echo "The analysis process was completed. \n Analyse succeeded: $result_success \n With additional information: $additions\n")"
 
       ################################ Update PR and complete the job ################################
       - name: Comment on PR
@@ -197,6 +199,7 @@ jobs:
           validate_err: ${{ steps.validate.outputs.stderr }}
           analysis_out: ${{ steps.analysis_status.outputs.stdout}}
           analysis_err: ${{ steps.analysis_status.outputs.stderr}}
+          analysis_report: ${{ steps.analysis_status.outputs.report}}
           plan: "${{ steps.plan.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -282,6 +285,8 @@ jobs:
             ${ process.env.analysis_err }
             ${ CODE_BLOCK }
 
+            ${ process.env.analysis_report }
+            
             </details>
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
