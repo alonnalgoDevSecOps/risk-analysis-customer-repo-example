@@ -175,9 +175,10 @@ jobs:
             else
               exit_code=1
               outcome="failure"
-              echo "::set-output name=stderr::$(printf "The analysis process was failed.\nWith additional information: $additions\n")"
+              echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
           fi
           
+          echo "outcome: $outcome"
           echo "::set-output name=analysis_state::${status}"
           echo "::set-output name=analysis_result::${result_success}"
           echo "::set-output name=analysis_addons::${additions}"
