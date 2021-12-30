@@ -170,21 +170,20 @@ jobs:
           if [ $result_success = "true" ]
             then
               exit_code=0
-              outcome="success"
               echo "::set-output name=stdout::$(printf "The analysis process was completed successfully.\nWith additional information: $additions\n")"
             else
               exit_code=1
-              outcome="failure"
               echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
           fi
           
-          echo "outcome: $outcome"
           echo "::set-output name=analysis_state::${status}"
           echo "::set-output name=analysis_result::${result_success}"
           echo "::set-output name=analysis_addons::${additions}"
           echo "::set-output name=exitcode::${exit_code}"
-          echo "::set-output name=outcome::${outcome}"
           echo "::set-output name=report::${additions}"
+          
+          exit $exit_code
+        continue-on-error: true
 
 
       ################################ Update PR and complete the job ################################
