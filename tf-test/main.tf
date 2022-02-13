@@ -95,5 +95,25 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 }
 
-
-
+resource "aws_security_group" "devsecops_test" {
+  name        = "devsecops_test"
+  description = "Display devsecops "
+  vpc_id      = "vpc-12345678"
+  ingress {
+    from_port   = 100
+    to_port     = 100
+    protocol    = "tcp"
+    cidr_blocks = ["172.31.0.0/16"]
+    description = "Raise 100 risk"
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Outgoing traffic"
+  }
+  tags = {
+    Name = "jenkins_slave"
+  }
+}
