@@ -105,9 +105,15 @@ jobs:
       - name: Terraform Plan
         if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure'
         id: plan
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false -no-color -out=/tmp/tf.out.json
         continue-on-error: true
-
+      
+      - name: Terraform Convert Plan to JSON
+        if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure' && steps.plan.outputs.exitcode == 0
+        id: plan_to_json
+        run: terraform show -json=/tmp/tf.out.json
+        continue-on-error: true
+        
       - name: Terraform Status
         id: status
         shell: bash
@@ -135,7 +141,7 @@ jobs:
         # It's required to use this way to write the plan's output into file as a result that the output is multiline text
         run: |
           cat << EOF > tmp.out
-          ${{ steps.plan.outputs.stdout }}
+          ${{ steps.plan_to_json.outputs.stdout }}
           EOF
 
       - name: Copy tmp file into S3
@@ -307,5 +313,7 @@ jobs:
           test ${{ steps.validate.outputs.exitcode }} -eq 0
           echo plan ${{ steps.plan.outputs.exitcode }}
           test ${{ steps.plan.outputs.exitcode }} -eq 0
+          echo plan_to_json ${{ steps.plan_to_json.outputs.exitcode }}
+          test ${{ steps.plan_to_json.outputs.exitcode }} -eq 0
           echo analysis ${{ steps.analysis_status.outputs.exitcode }}
           test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
