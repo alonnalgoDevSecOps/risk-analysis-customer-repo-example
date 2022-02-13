@@ -105,7 +105,7 @@ jobs:
       - name: Terraform Plan
         if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure'
         id: plan
-        run: terraform plan -input=false -no-color --json
+        run: terraform plan -input=false -no-color
         continue-on-error: true
 
       - name: Terraform Status
