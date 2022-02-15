@@ -154,7 +154,7 @@ jobs:
           else
             echo "Terraform phase was completed successfully."
             echo 'terraform_stdout<<EOF' >> $GITHUB_ENV
-            echo "${{ steps.plan.outputs.stdout }}" >> $GITHUB_ENV
+            echo "${{ steps.plan_to_json.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           fi
 
