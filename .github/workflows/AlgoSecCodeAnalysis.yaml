@@ -140,6 +140,7 @@ jobs:
             echo "${{ steps.plan.outputs.stdout }}"
           else
             echo "Terraform phase was completed successfully."
+            >&2 echo "${{ steps.plan.outputs.stdout }}"
             echo "${{ steps.plan.outputs.stdout }}"
           fi
 
