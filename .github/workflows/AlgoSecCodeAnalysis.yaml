@@ -134,7 +134,6 @@ jobs:
             echo "Error in plan step. Exit code $plan_status."
           else
             echo "Terraform phase was completed successfully."
-            echo "::set-output name=stderr::${{ steps.plan.outputs.stderr }}"
             echo "::set-output name=stdout::${{ steps.plan.outputs.stdout }}"
           fi
           echo "Complete step with exit code ${status}"
