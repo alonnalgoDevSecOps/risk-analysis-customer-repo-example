@@ -126,6 +126,8 @@ jobs:
           if [ $init_status -ne 0 ]
             then
               echo "Error in init step. Exit code $init_status."
+              stderr=${{ steps.init.outputs.stderr }}
+              stdout=${{ steps.init.outputs.stdout }}
           elif [ $validate_status -ne 0 ]
             then
               echo "Error in validate step. Exit code $validate_status."
