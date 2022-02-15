@@ -124,15 +124,15 @@ jobs:
 
           status=$( if [[ $init_status>0 || $validate_status>0 || $plan_status>0 ]]; then echo 1; else echo 0; fi )
           echo "::set-output name=exitcode::${status}"
-          if [ $init_status ]
+          if [ $init_status -ne 0 ]
             then
               echo "Error in init step. Exit code $init_status. Stderr: ${{ steps.init.outputs.stderr }}"
               echo "::set-output name=stderr::${{ steps.init.outputs.stderr }}"
-          elif [ $validate_status ]
+          elif [ $validate_status -ne 0 ]
             then
               echo "Error in validate step. Exit code $validate_status. Stderr: ${{ steps.validate.outputs.stderr }}"
               echo "::set-output name=stderr::${{ steps.validate.outputs.stderr }}"
-          elif [ $plan_status ]
+          elif [ $plan_status -ne 0 ]
             then
               echo "Error in plan step. Exit code $plan_status. Stderr: ${{ steps.plan.outputs.stderr }}"
               echo "::set-output name=stderr::${{ steps.plan.outputs.stderr }}"
