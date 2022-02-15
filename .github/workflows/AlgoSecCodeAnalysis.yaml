@@ -130,7 +130,7 @@ jobs:
             echo 'terraform_stderr<<EOF' >> $GITHUB_ENV
             echo "${{ steps.init.outputs.stderr }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
-            echo 'terraform_ostdout<<EOF' >> $GITHUB_ENV
+            echo 'terraform_stdout<<EOF' >> $GITHUB_ENV
             echo "${{ steps.init.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           elif [[ $validate_status -ne 0 ]]
@@ -139,7 +139,7 @@ jobs:
             echo 'terraform_stderr<<EOF' >> $GITHUB_ENV
             echo "${{ steps.validate.outputs.stderr }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
-            echo 'terraform_ostdout<<EOF' >> $GITHUB_ENV
+            echo 'terraform_stdout<<EOF' >> $GITHUB_ENV
             echo "${{ steps.validate.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           elif [[ $plan_status -ne 0 ]]
@@ -148,12 +148,12 @@ jobs:
             echo 'terraform_stderr<<EOF' >> $GITHUB_ENV
             echo "${{ steps.plan.outputs.stderr }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
-            echo 'terraform_ostdout<<EOF' >> $GITHUB_ENV
+            echo 'terraform_stdout<<EOF' >> $GITHUB_ENV
             echo "${{ steps.plan.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           else
             echo "Terraform phase was completed successfully."
-            echo 'terraform_output<<EOF' >> $GITHUB_ENV
+            echo 'terraform_stdout<<EOF' >> $GITHUB_ENV
             echo "${{ steps.plan.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           fi
