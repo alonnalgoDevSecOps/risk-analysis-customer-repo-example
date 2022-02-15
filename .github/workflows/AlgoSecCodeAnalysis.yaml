@@ -122,6 +122,7 @@ jobs:
           validate_status=${{ steps.validate.outputs.exitcode }}
           plan_status=${{ steps.plan.outputs.exitcode }}
 
+          status=$( if [[ $init_status -ne 0 || $validate_status -ne 0 || $plan_status -ne 0 ]]; then echo 1; else echo 0; fi )
           
           echo "Complete step with exit code ${status}"
           echo "Stderr: ${stderr}"
