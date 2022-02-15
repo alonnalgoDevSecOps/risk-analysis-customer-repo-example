@@ -131,6 +131,8 @@ jobs:
           elif [ $validate_status -ne 0 ]
             then
               echo "Error in validate step. Exit code $validate_status."
+              stderr=$(echo ${{ steps.validate.outputs.stderr }})
+              stdout=$(echo ${{ steps.validate.outputs.stdout }})
           elif [ $plan_status -ne 0 ]
             then
               echo "Error in plan step. Exit code $plan_status."
