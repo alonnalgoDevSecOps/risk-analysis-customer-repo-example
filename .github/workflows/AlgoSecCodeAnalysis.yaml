@@ -126,20 +126,27 @@ jobs:
           echo "::set-output name=exitcode::${status}"
           if [ $init_status -ne 0 ]
             then
-              echo "Error in init step. Exit code $init_status. Stderr: ${{ steps.init.outputs.stderr }}"
-              echo "::set-output name=stderr::${{ steps.init.outputs.stderr }}"
+              echo "Error in init step. Exit code $init_status."
+              stderr = ${{ steps.init.outputs.stderr }}
+              stdout = ${{ steps.init.outputs.stdout }}
           elif [ $validate_status -ne 0 ]
             then
-              echo "Error in validate step. Exit code $validate_status. Stderr: ${{ steps.validate.outputs.stderr }}"
-              echo "::set-output name=stderr::${{ steps.validate.outputs.stderr }}"
+              echo "Error in validate step. Exit code $validate_status."
+              stderr = ${{ steps.validate.outputs.stderr }}
+              stdout = ${{ steps.validate.outputs.stdout }}
           elif [ $plan_status -ne 0 ]
             then
-              echo "Error in plan step. Exit code $plan_status. Stderr: ${{ steps.plan.outputs.stderr }}"
-              echo "::set-output name=stderr::${{ steps.plan.outputs.stderr }}"
+              echo "Error in plan step. Exit code $plan_status."
+              stderr = ${{ steps.plan.outputs.stderr }}
+              stdout = ${{ steps.plan.outputs.stdout }}
           else
-              echo "Terraform phase was completed successfully. Stdout: ${{ steps.plan.outputs.stdout }}"
-              echo "::set-output name=stdout::${{ steps.plan.outputs.stdout }}"
+              echo "Terraform phase was completed successfully."
+              stdout = ${{ steps.plan.outputs.stdout }}
           fi
+          echo "::set-output name=stderr::${stderr}"
+          echo "::set-output name=stdout::${stdout}"
+
+
 
       - name: Echo status
         run: |
@@ -201,7 +208,7 @@ jobs:
       #         out = "The analysis process was completed successfully"
       #         if [ -z $additions ]
       #           out = $out'\n'$additions
-      #         echo "::set-output name=stdout::$out"
+      #         echo "::set-output name=stdout::${out}"
       #       else
       #         exit_code=1
       #         echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
