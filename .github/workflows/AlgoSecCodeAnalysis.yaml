@@ -123,17 +123,17 @@ jobs:
           plan_status=${{ steps.plan.outputs.exitcode }}
 
           status=$( if [[ $init_status -ne 0 || $validate_status -ne 0 || $plan_status -ne 0 ]]; then echo 1; else echo 0; fi )
-          if [ $init_status -ne 0 ]
+          if [[ $init_status -ne 0 ]]
             then
               echo "Error in init step. Exit code $init_status."
               echo "::set-output name=stderr::${{ steps.init.outputs.stderr }}"
               echo "::set-output name=stdout::${{ steps.init.outputs.stdout }}"
-          elif [ $validate_status -ne 0 ]
+          elif [[ $validate_status -ne 0 ]]
             then
               echo "Error in validate step. Exit code $validate_status."
               echo "::set-output name=stderr::${{ steps.validate.outputs.stderr }}"
               echo "::set-output name=stdout::${{ steps.validate.outputs.stdout }}"
-          elif [ $plan_status -ne 0 ]
+          elif [[ $plan_status -ne 0 ]]
             then
               echo "Error in plan step. Exit code $plan_status."
               echo "::set-output name=stderr::${{ steps.plan.outputs.stderr }}"
