@@ -105,7 +105,13 @@ jobs:
       - name: Terraform Plan
         if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure'
         id: plan
-        run: terraform plan -input=false -no-color --json
+        run: terraform plan -input=false -no-color -out=/tmp/tf.out.json
+        continue-on-error: true
+
+      - name: Terraform Convert Plan to JSON
+        if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure' && steps.plan.outputs.exitcode == 0
+        id: plan_to_json
+        run: terraform show -json /tmp/tf.out.json
         continue-on-error: true
 
       - name: Terraform Status
