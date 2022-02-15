@@ -153,13 +153,15 @@ jobs:
           echo "Terraform running stdout ${{ steps.status.outputs.stdout }}"
 
       ################################ Aws steps ################################
-      # - name: Generate uuid for tmp file name
-      #   if: steps.status.outputs.exitcode == 0
-      #   id: generate-uuid
-      #   uses: filipstefansson/uuid-action@v1
-      #   with:
-      #     name: ${{ github.sha }}
+      - name: Generate uuid for tmp file name
+        if: steps.status.outputs.exitcode == 0
+        id: generate-uuid
+        uses: filipstefansson/uuid-action@v1
+        with:
+          name: ${{ github.sha }}
 
+      - name: Dummy
+        run: cat /tmp/tf.json.out
       # - name: Copy tmp file into S3
       #   if: steps.status.outputs.exitcode == 0
       #   run: |
