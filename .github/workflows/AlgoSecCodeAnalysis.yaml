@@ -1,5 +1,5 @@
 name: AlgoSec Action
-on: [ pull_request ]
+on: [pull_request]
 jobs:
   changedfiles:
     runs-on: ubuntu-latest
@@ -27,11 +27,11 @@ jobs:
           # Get the list of all changed resources
           diff_result=$(git diff --name-only "origin/${{ github.base_ref }}" ${{ github.sha }} )
           echo "Diff between origin/${{ github.base_ref }} and ${{ github.sha }}"
-          
+
           # Extract terraform's files
           terraform_files=$(echo $diff_result | tr -s '[[:space:]]' '\n' | grep -o '.*\.tf$')
           echo "Changed Terraform's files: $terraform_files"
-          
+
           #extract folders where the changed teraforms files are stored
           #and create json to proceed them in the matrix style
           matrix_output="{\"include\":[ "
@@ -46,7 +46,7 @@ jobs:
             fi
           done
           matrix_output="$matrix_output ]}"
-          
+
           echo "Prepared working matrix: $matrix_output"
           echo "::set-output name=matrix::${matrix_output}"
 
@@ -105,7 +105,13 @@ jobs:
       - name: Terraform Plan
         if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure'
         id: plan
-        run: terraform plan -input=false -no-color --json
+        run: terraform plan -input=false -no-color -out=/tmp/tf.out.json
+        continue-on-error: true
+
+      - name: Terraform Convert Plan to JSON
+        if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure' && steps.plan.outputs.exitcode == 0
+        id: plan_to_json
+        run: terraform show -json /tmp/tf.out.json
         continue-on-error: true
 
       - name: Terraform Status
@@ -113,199 +119,178 @@ jobs:
         shell: bash
         run: |
           init_status=${{ steps.init.outputs.exitcode }}
-          validate_status=$(if [ ${{ steps.validate.outputs.exitcode }} ]; then echo ${{ steps.validate.outputs.exitcode }}; else echo 0; fi )
-          plan_status=$(if [ ${{ steps.plan.outputs.exitcode }} ]; then echo ${{ steps.plan.outputs.exitcode }}; else echo 0; fi )
+          validate_status=${{ steps.validate.outputs.exitcode }}
+          plan_status=${{ steps.plan.outputs.exitcode }}
 
-          status=$( if [[ $init_status>0 || $validate_status>0 || $plan_status>0 ]]; then echo 1; else echo 0; fi )
+          status=$( if [[ $init_status -ne 0 || $validate_status -ne 0 || $plan_status -ne 0 ]]; then echo 1; else echo 0; fi )
+          if [ $init_status -ne 0 ]
+            then
+              echo "Error in init step. Exit code $init_status."
+              stderr=${{ steps.init.outputs.stderr }}
+              stdout=${{ steps.init.outputs.stdout }}
+          elif [ $validate_status -ne 0 ]
+            then
+              echo "Error in validate step. Exit code $validate_status."
+              stderr=${{ steps.validate.outputs.stderr }}
+              stdout=${{ steps.validate.outputs.stdout }}
+          elif [ $plan_status -ne 0 ]
+            then
+              echo "Error in plan step. Exit code $plan_status."
+              stderr=${{ steps.plan.outputs.stderr }}
+              stdout=${{ steps.plan.outputs.stdout }}
+          else
+              echo "Terraform phase was completed successfully."
+              stderr=''
+              stdout=${{ steps.plan.outputs.stdout }}
+          fi
+          echo "::set-output name=stderr::${stderr}"
+          echo "::set-output name=stdout::${stdout}"
           echo "::set-output name=exitcode::${status}"
 
+
+
       - name: Echo status
-        run: echo Terraform running status ${{ steps.status.outputs.exitcode }}
-
-      ################################ Aws steps ################################
-      - name: Generate uuid for tmp file name
-        if: steps.status.outputs.exitcode == 0
-        id: generate-uuid
-        uses: filipstefansson/uuid-action@v1
-        with:
-          name: ${{ github.sha }}
-
-      - name: Store plan's output into file
-        if: steps.status.outputs.exitcode == 0
-        # It's required to use this way to write the plan's output into file as a result that the output is multiline text
         run: |
-          cat << EOF > tmp.out
-          ${{ steps.plan.outputs.stdout }}
-          EOF
+          echo Terraform running status ${{ steps.status.outputs.exitcode }}
+          echo Terraform running stderr ${{ steps.status.outputs.stderr }}
+          echo Terraform running stdout ${{ steps.status.outputs.stdout }}
 
-      - name: Copy tmp file into S3
-        if: steps.status.outputs.exitcode == 0
-        run: |
-          aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
+      # ################################ Aws steps ################################
+      # - name: Generate uuid for tmp file name
+      #   if: steps.status.outputs.exitcode == 0
+      #   id: generate-uuid
+      #   uses: filipstefansson/uuid-action@v1
+      #   with:
+      #     name: ${{ github.sha }}
 
-      - name: Wait till analysis complete
-        if: steps.status.outputs.exitcode == 0
-        id: analysis_status
-        shell: bash
-        run: |
-          for(( i=1; i<=10; i++ ))
-          do
-            output=$(curl -s "https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/response?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
-            status=$(echo $output | jq -r '.message_found');
-            if [ $status = "true" ]
-              then
-                result=$(echo $output | jq -r '.result');
-                echo "full result: $result"
-                result_success=$(echo $result | jq -r '.success')
-                echo "sucess: $result_success"
-                additions=$(echo $result | jq -r '.additions')
-                echo "additions: $additions"
-                break
-              else
-                echo "The result is not ready yet" 
-                sleep 30
-            fi
-          done
+      # - name: Store plan's output into file
+      #   if: steps.status.outputs.exitcode == 0
+      #   # It's required to use this way to write the plan's output into file as a result that the output is multiline text
+      #   run: |
+      #     cat << EOF > tmp.out
+      #     ${{ steps.plan.outputs.stdout }}
+      #     EOF
 
-          if [ $result_success = "true" ]
-            then
-              exit_code=0
-              echo "::set-output name=stdout::$(printf "The analysis process was completed successfully.\nWith additional information: $additions\n")"
-            else
-              exit_code=1
-              echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
-          fi
-          
-          echo "::set-output name=analysis_state::${status}"
-          echo "::set-output name=analysis_result::${result_success}"
-          echo "::set-output name=analysis_addons::${additions}"
-          echo "::set-output name=exitcode::${exit_code}"
-          echo "::set-output name=report::${additions}"
-          
-          exit $exit_code
-        continue-on-error: true
+      # - name: Copy tmp file into S3
+      #   if: steps.status.outputs.exitcode == 0
+      #   run: |
+      #     aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
+      # - name: Wait till analysis complete
+      #   if: steps.status.outputs.exitcode == 0
+      #   id: analysis_status
+      #   shell: bash
+      #   run: |
+      #     for(( i=1; i<=10; i++ ))
+      #     do
+      #       output=$(curl -s "https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/response?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
+      #       status=$(echo $output | jq -r '.message_found');
+      #       if [ $status = "true" ]
+      #         then
+      #           result=$(echo $output | jq -r '.result');
+      #           echo "full result: $result"
+      #           result_success=$(echo $result | jq -r '.success')
+      #           echo "sucess: $result_success"
+      #           additions=$(echo $result | jq -r '.additions')
+      #           echo "additions: $additions"
+      #           analysis_state=$(cat output.txt | jq -r '.analysis_state')
+      #           echo "analysis state: $analysis_state"
+      #           analysis_result = ${result_success} && $analysis_state
+      #           break
+      #         else
+      #           echo "The result is not ready yet" 
+      #           sleep 30
+      #       fi
+      #     done
 
-      ################################ Update PR and complete the job ################################
-      - name: Comment on PR
-        # update Pull Request by the operation status
-        uses: actions/github-script@v5
-        env:
-          format_out: ${{ steps.fmt.outputs.stdout }}
-          format_err: ${{ steps.fmt.outputs.stderr }}
-          init_out: ${{ steps.init.outputs.stdout }}
-          init_err: ${{ steps.init.outputs.stderr }}
-          validate_out: ${{ steps.validate.outputs.stdout }}
-          validate_err: ${{ steps.validate.outputs.stderr }}
-          analysis_out: ${{ steps.analysis_status.outputs.stdout}}
-          analysis_err: ${{ steps.analysis_status.outputs.stderr}}
-          analysis_report: ${{ steps.analysis_status.outputs.report}}
-          plan: "${{ steps.plan.outputs.stdout }}"
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const CODE_BLOCK = '```';
-            const fmt_result = '${{ steps.fmt.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
-            const init_result = '${{ steps.init.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
-            const validate_result = '${{ steps.validate.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
-            const plan_result = '${{ steps.plan.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
-            const analysis_result = '${{ steps.analysis_status.outcome }}' === 'failure' ? ':x:' : ':heavy_check_mark:';
+      #     if [ $status = "true" && $analysis_result = "true" ]
+      #       then
+      #         exit_code=0
+      #         out = "The analysis process was completed successfully"
+      #         if [ -z $additions ]
+      #           out = $out'\n'$additions
+      #         echo "::set-output name=stdout::${out}"
+      #       else
+      #         exit_code=1
+      #         echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
+      #     fi
 
-            console.log('analysis completed ${{ steps.analysis_status.outputs.exitcode }}-${{ steps.analysis_status.outcome }} with output state=${{ steps.analysis_status.outputs.analysis_state }} result=${{ steps.analysis_status.outputs.analysis_result }} additionals=${{ steps.analysis_status.outputs.analysis_addons }}')
+      #     echo "::set-output name=exitcode::${exit_code}"
+      #     echo "::set-output name=report::${additions}"
 
-            const output = `
-            ### :heavy_check_mark: Terraform Format and Style 🎨
-            <details><summary>Logs</summary>
-            Output
+      #     exit $exit_code
+      #   continue-on-error: true
 
-            ${ CODE_BLOCK }diff
-            ${ process.env.format_out }
-            ${ CODE_BLOCK }
+      # ################################ Update PR and complete the job ################################
+      # - name: Comment on PR
+      #   # update Pull Request by the operation status
+      #   uses: actions/github-script@v5
+      #   env:
+      #     terraform_status: ${{ steps.status.outputs.exitcode }}
+      #     terraform_stderr: ${{ steps.status.outputs.stderr }}
+      #     terraform_stdout: ${{ steps.status.outputs.stdout }}
+      #     analysis_status: ${{ steps.analysis_status.outputs.exitcode}}
+      #     analysis_out: ${{ steps.analysis_status.outputs.stdout}}
+      #     analysis_err: ${{ steps.analysis_status.outputs.stderr}}
+      #     analysis_report: ${{ steps.analysis_status.outputs.report}}
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const CODE_BLOCK = '```';
+      #       const terraform_result = '${ process.env.terraform_status } == 0 ' ? ':heavy_check_mark:' : ':x:';
+      #       const analysis_result = '${ process.env.analysis_status } == 0' ? ':heavy_check_mark:' : ':x:';
 
-            Errors
+      #       const output = `
+      #       ### ${ interraform_result } Terraform Processing ⚙️
+      #       <details><summary>Terraform Log</summary>
+      #       Output
 
-            ${ CODE_BLOCK }
-            ${ process.env.format_err }
-            ${ CODE_BLOCK }
+      #       ${ CODE_BLOCK }diff
+      #       ${ process.env.terraform_stdout }
+      #       ${ CODE_BLOCK }
 
-            </details> <!-- End Format Logs -->
+      #       Errors
 
-            ### ${ init_result } Terraform Initialization ⚙️
-            <details><summary>Logs</summary>
-            Output
+      #       ${ CODE_BLOCK }
+      #       ${ process.env.terraform_stderr }
+      #       ${ CODE_BLOCK }
 
-            ${ CODE_BLOCK }
-            ${ process.env.init_out }
-            ${ CODE_BLOCK }
+      #       </details> <!-- End Format Logs -->
 
-            Errors
+      #       ###  ${ analysis_result }: Code Analysis 🎨
+      #       <details><summary>Logs</summary>
+      #       Output
 
-            ${ CODE_BLOCK }
-            ${ process.env.init_err }
-            ${ CODE_BLOCK }
+      #       ${ CODE_BLOCK }
+      #       ${ process.env.analysis_out }
+      #       ${ CODE_BLOCK }
 
-            </details> <!-- End Init Logs -->
+      #       Errors
 
-            ### ${ validate_result } Terraform Validation 🤖
-            <details><summary>Logs</summary>
-            Output
+      #       ${ CODE_BLOCK }
+      #       ${ process.env.analysis_err }
+      #       ${ CODE_BLOCK }
 
-            ${ CODE_BLOCK }
-            ${ process.env.validate_out }
-            ${ CODE_BLOCK }
+      #       ${ process.env.analysis_report }
 
-            Errors
+      #       </details>
+      #       *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
-            ${ CODE_BLOCK }
-            ${ process.env.validate_err }
-            ${ CODE_BLOCK }
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: output
+      #       })
 
-            </details> <!-- End Validate Logs -->
-
-            ### ${ plan_result } Terraform Plan 📖
-            <details><summary>Logs</summary>
-
-            ${ CODE_BLOCK }terraform
-            ${ process.env.plan }
-            ${ CODE_BLOCK }
-
-            </details> <!-- End Plan -->
-
-            ###  ${ analysis_result }: Code Analysis 🎨
-            <details><summary>Logs</summary>
-            Output
-
-            ${ CODE_BLOCK }
-            ${ process.env.analysis_out }
-            ${ CODE_BLOCK }
-
-            Errors
-
-            ${ CODE_BLOCK }
-            ${ process.env.analysis_err }
-            ${ CODE_BLOCK }
-
-            ${ process.env.analysis_report }
-            
-            </details>
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            })
-
-
-      - name: Check Teraform results
-        shell: bash
-        run: |
-          echo init ${{ steps.init.outputs.exitcode }}
-          test ${{ steps.init.outputs.exitcode }} -eq 0
-          echo validate ${{ steps.validate.outputs.exitcode }}
-          test ${{ steps.validate.outputs.exitcode }} -eq 0
-          echo plan ${{ steps.plan.outputs.exitcode }}
-          test ${{ steps.plan.outputs.exitcode }} -eq 0
-          echo analysis ${{ steps.analysis_status.outputs.exitcode }}
-          test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
+      # - name: Check Teraform results
+      #   shell: bash
+      #   run: |
+      #     echo init ${{ steps.init.outputs.exitcode }}
+      #     test ${{ steps.init.outputs.exitcode }} -eq 0
+      #     echo validate ${{ steps.validate.outputs.exitcode }}
+      #     test ${{ steps.validate.outputs.exitcode }} -eq 0
+      #     echo plan ${{ steps.plan.outputs.exitcode }}
+      #     test ${{ steps.plan.outputs.exitcode }} -eq 0
+      #     echo analysis ${{ steps.analysis_status.outputs.exitcode }}
+      #     test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
