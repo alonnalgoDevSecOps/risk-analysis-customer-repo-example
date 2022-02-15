@@ -146,13 +146,13 @@ jobs:
 
           echo "Complete step with exit code ${status}"
           echo "::set-output name=exitcode::${status}"
-          echo "::set-output name=output::${{ steps.plan.outputs.stdout }}"
+          echo "::set-env name=terraform_output::${{ steps.plan.outputs.stdout }}"
 
       - name: Echo status
         run: |
           echo "Terraform running status ${{ steps.status.outputs.exitcode }}"
           echo "Terraform running stderr ${{ steps.status.outputs.stderr }}"
-          echo "Terraform running stdout ${{ steps.status.outputs.output }}"
+          echo "Terraform running stdout $terraform_output"
 
       # ################################ Aws steps ################################
       # - name: Generate uuid for tmp file name
