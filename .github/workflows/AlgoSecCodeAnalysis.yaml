@@ -153,6 +153,9 @@ jobs:
             echo 'EOF' >> $GITHUB_ENV
           else
             echo "Terraform phase was completed successfully."
+            echo 'terraform_stdout<<EOF' >> $GITHUB_ENV
+            echo "${{ steps.plan.outputs.stdout }}" >> $GITHUB_ENV
+            echo 'EOF' >> $GITHUB_ENV
           fi
 
           echo "Complete step with exit code ${status}"
@@ -175,6 +178,7 @@ jobs:
       - name: Copy tmp file into S3
         if: steps.status.outputs.exitcode == 0
         run: |
+          cat tf.json.out
           aws s3 cp tf.json.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
