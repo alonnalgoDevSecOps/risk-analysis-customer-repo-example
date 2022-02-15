@@ -153,7 +153,7 @@ jobs:
           echo "Terraform running status ${{ steps.status.outputs.exitcode }}"
           echo "Terraform running stderr ${{ steps.status.outputs.stderr }}"
           echo "Terraform running stdout ${{ steps.status.outputs.stdout }}"
-          echo "Terraform plan ${{ outputs.tf-status.value }}"
+          echo "Terraform plan ${{ needs.AlgoSec-Code-Analysis.outputs.tf-status }}"
 
       ################################ Aws steps ################################
       - name: Generate uuid for tmp file name
