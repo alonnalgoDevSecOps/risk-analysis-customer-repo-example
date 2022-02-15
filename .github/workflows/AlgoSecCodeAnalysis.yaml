@@ -123,19 +123,20 @@ jobs:
 
           status=$( if [[ $init_status>0 || $validate_status>0 || $plan_status>0 ]]; then echo 1; else echo 0; fi )
           echo "::set-output name=exitcode::${status}"
-          if [ $init_status>0 ]
+          if [ $init_status ]
             then
               echo "Error in init step. Stderr: ${{ steps.init.outputs.stderr }}"
               echo "::set-output name=stderr::${{ steps.init.outputs.stderr }}"
-          elif [ $validate_status>0 ]
+          elif [ $validate_status ]
             then
               echo "Error in validate step. Stderr: ${{ steps.validate.outputs.stderr }}"
               echo "::set-output name=stderr::${{ steps.validate.outputs.stderr }}"
-          elif [ $plan_status>0 ]
+          elif [ $plan_status ]
             then
               echo "Error in plan step. Stderr: ${{ steps.plan.outputs.stderr }}"
               echo "::set-output name=stderr::${{ steps.plan.outputs.stderr }}"
           else
+              echo "Terraform phase completes successfully"
               echo "::set-output name=stdout::${{ steps.plan.outputs.stdout }}"
           fi
 
