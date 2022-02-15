@@ -122,27 +122,7 @@ jobs:
           validate_status=${{ steps.validate.outputs.exitcode }}
           plan_status=${{ steps.plan.outputs.exitcode }}
 
-          # status=$( if [[ $init_status -ne 0 || $validate_status -ne 0 || $plan_status -ne 0 ]]; then echo 1; else echo 0; fi )
-          # if [ $init_status -ne 0 ]
-          #   then
-          #     echo "Error in init step. Exit code $init_status."
-          #     stderr=${{ steps.init.outputs.stderr }}
-          #     stdout=${{ steps.init.outputs.stdout }}
-          # elif [ $validate_status -ne 0 ]
-          #   then
-          #     echo "Error in validate step. Exit code $validate_status."
-          #     stderr=${{ steps.validate.outputs.stderr }}
-          #     stdout=${{ steps.validate.outputs.stdout }}
-          # elif [ $plan_status -ne 0 ]
-          #   then
-          #     echo "Error in plan step. Exit code $plan_status."
-          #     stderr=${{ steps.plan.outputs.stderr }}
-          #     stdout=${{ steps.plan.outputs.stdout }}
-          # else
-          #     echo "Terraform phase was completed successfully."
-          #     stderr=''
-          #     stdout=${{ steps.plan.outputs.stdout }}
-          # fi
+          
           echo "Complete step with exit code ${status}"
           echo "Stderr: ${stderr}"
           echo "Stdout: ${stdout}"
