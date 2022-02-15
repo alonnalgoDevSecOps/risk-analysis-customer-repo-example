@@ -128,18 +128,12 @@ jobs:
           # Check the teraform's init, validate and plan steps and initialize terraform_output and terraform_err environment variables
           then
             echo "Error in init step. Exit code $init_status."
-            >&2 echo "${{ steps.init.outputs.stderr }}"
-            echo "${{ steps.init.outputs.stdout }}"
           elif [[ $validate_status -ne 0 ]]
           then
             echo "Error in validate step. Exit code $validate_status."
-            >&2 echo "${{ steps.validate.outputs.stderr }}"
-            echo "${{ steps.validate.outputs.stdout }}"
           elif [[ $plan_status -ne 0 ]]
           then
             echo "Error in plan step. Exit code $plan_status."
-            >&2 echo "${{ steps.plan.outputs.stderr }}"
-            echo "${{ steps.plan.outputs.stdout }}"
           else
             echo "Terraform phase was completed successfully."
             # echo "${{ steps.plan.outputs.stdout }}"
