@@ -136,6 +136,8 @@ jobs:
           elif [ $plan_status -ne 0 ]
             then
               echo "Error in plan step. Exit code $plan_status."
+              stderr=$(echo ${{ steps.plan.outputs.stderr }})
+              stdout=$(echo ${{ steps.plan.outputs.stdout }})
           else
               echo "Terraform phase was completed successfully."
           fi
