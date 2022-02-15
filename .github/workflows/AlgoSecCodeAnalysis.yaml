@@ -111,7 +111,7 @@ jobs:
       - name: Terraform Convert Plan to JSON
         if: steps.init.outputs.exitcode == 0 && steps.validate.outputs.exitcode == 0 && steps.plan.outputs.exitcode == 0
         id: plan_to_json
-        run: terraform show -json /tmp/tf.out > /tmp/tf.json.out
+        run: terraform show -json /tmp/tf.out
         continue-on-error: true
 
       - name: Terraform Status
@@ -140,7 +140,7 @@ jobs:
             echo "${{ steps.plan.outputs.stdout }}"
           else
             echo "Terraform phase was completed successfully."
-            echo "${{ steps.plan.outputs.stdout }}" >/dev/stderr
+            echo "${{ steps.plan_to_json.outputs.stdout }}" >/tmp/tf.json.out
             echo "${{ steps.plan.outputs.stdout }}"
           fi
 
