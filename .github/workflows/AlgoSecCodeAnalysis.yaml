@@ -103,15 +103,15 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Plan
-        if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure'
+        if: steps.init.outputs.exitcode == 0 && steps.validate.outputs.exitcode == 0
         id: plan
-        run: terraform plan -input=false -no-color -out=/tmp/tf.out.json
+        run: terraform plan -input=false -no-color -out=tf.out
         continue-on-error: true
 
       - name: Terraform Convert Plan to JSON
-        if: steps.init.outcome != 'failure' && steps.validate.outcome != 'failure' && steps.plan.outputs.exitcode == 0
+        if: steps.init.outputs.exitcode == 0 && steps.validate.outputs.exitcode == 0 && steps.plan.outputs.exitcode == 0
         id: plan_to_json
-        run: terraform show -json /tmp/tf.out.json
+        run: terraform show -json /tmp/tf.out > tf.json.out
         continue-on-error: true
 
       - name: Terraform Status
@@ -153,9 +153,6 @@ jobs:
             echo 'EOF' >> $GITHUB_ENV
           else
             echo "Terraform phase was completed successfully."
-            echo 'terraform_stdout<<EOF' >> $GITHUB_ENV
-            echo "${{ steps.plan_to_json.outputs.stdout }}" >> $GITHUB_ENV
-            echo 'EOF' >> $GITHUB_ENV
           fi
 
           echo "Complete step with exit code ${status}"
@@ -175,18 +172,10 @@ jobs:
         with:
           name: ${{ github.sha }}
 
-      - name: Store plan's output into file
-        if: steps.status.outputs.exitcode == 0
-        # It's required to use this way to write the plan's output into file as a result that the output is multiline text
-        run: |
-          cat << EOF > tmp.out
-          ${{ env.terraform_stdout }}
-          EOF
-
       - name: Copy tmp file into S3
         if: steps.status.outputs.exitcode == 0
         run: |
-          aws s3 cp tmp.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
+          aws s3 cp tf.json.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
         if: steps.status.outputs.exitcode == 0
