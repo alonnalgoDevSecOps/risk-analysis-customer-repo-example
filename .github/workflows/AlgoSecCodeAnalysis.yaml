@@ -119,29 +119,30 @@ jobs:
         shell: bash
         run: |
           init_status=${{ steps.init.outputs.exitcode }}
-          validate_status=$(if [ ${{ steps.validate.outputs.exitcode }} ]; then echo ${{ steps.validate.outputs.exitcode }}; else echo 0; fi )
-          plan_status=$(if [ ${{ steps.plan.outputs.exitcode }} ]; then echo ${{ steps.plan.outputs.exitcode }}; else echo 0; fi )
+          validate_status=${{ steps.validate.outputs.exitcode }}
+          plan_status=${{ steps.plan.outputs.exitcode }}
 
-          status=$( if [[ $init_status>0 || $validate_status>0 || $plan_status>0 ]]; then echo 1; else echo 0; fi )
+          status=$( if [[ $init_status -ne 0 || $validate_status -ne 0 || $plan_status -ne 0 ]]; then echo 1; else echo 0; fi )
           echo "::set-output name=exitcode::${status}"
           if [ $init_status -ne 0 ]
             then
               echo "Error in init step. Exit code $init_status."
-              stderr = ${{ steps.init.outputs.stderr }}
-              stdout = ${{ steps.init.outputs.stdout }}
+              stderr=${{ steps.init.outputs.stderr }}
+              stdout=${{ steps.init.outputs.stdout }}
           elif [ $validate_status -ne 0 ]
             then
               echo "Error in validate step. Exit code $validate_status."
-              stderr = ${{ steps.validate.outputs.stderr }}
-              stdout = ${{ steps.validate.outputs.stdout }}
+              stderr=${{ steps.validate.outputs.stderr }}
+              stdout=${{ steps.validate.outputs.stdout }}
           elif [ $plan_status -ne 0 ]
             then
               echo "Error in plan step. Exit code $plan_status."
-              stderr = ${{ steps.plan.outputs.stderr }}
-              stdout = ${{ steps.plan.outputs.stdout }}
+              stderr=${{ steps.plan.outputs.stderr }}
+              stdout=${{ steps.plan.outputs.stdout }}
           else
               echo "Terraform phase was completed successfully."
-              stdout = ${{ steps.plan.outputs.stdout }}
+              stderr=''
+              stdout=${{ steps.plan.outputs.stdout }}
           fi
           echo "::set-output name=stderr::${stderr}"
           echo "::set-output name=stdout::${stdout}"
