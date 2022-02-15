@@ -164,7 +164,7 @@ jobs:
         if: steps.status.outputs.exitcode == 0
         run: |
           cat /tmp/tf.json.out
-          aws s3 cp /tmp/tf.json.out s3://vitalylanda-test/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
+          aws s3 cp /tmp/tf.json.out s3://devsecops-dev/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
         if: steps.status.outputs.exitcode == 0
