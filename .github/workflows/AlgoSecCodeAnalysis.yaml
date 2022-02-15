@@ -127,27 +127,32 @@ jobs:
           # Check the teraform's init, validate and plan steps and initialize terraform_output and terraform_err environment variables
           then
             echo "Error in init step. Exit code $init_status."
-            echo "::set-output name=stderr::${{ steps.init.outputs.stderr }}"
-            echo 'terraform_output<<EOF' >> $GITHUB_ENV
+            echo 'terraform_stderr<<EOF' >> $GITHUB_ENV
+            echo "${{ steps.init.outputs.stderr }}" >> $GITHUB_ENV
+            echo 'EOF' >> $GITHUB_ENV
+            echo 'terraform_ostdout<<EOF' >> $GITHUB_ENV
             echo "${{ steps.init.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           elif [[ $validate_status -ne 0 ]]
           then
             echo "Error in validate step. Exit code $validate_status."
-            echo "::set-output name=stderr::${{ steps.validate.outputs.stderr }}"
-            echo 'terraform_output<<EOF' >> $GITHUB_ENV
+            echo 'terraform_stderr<<EOF' >> $GITHUB_ENV
+            echo "${{ steps.validate.outputs.stderr }}" >> $GITHUB_ENV
+            echo 'EOF' >> $GITHUB_ENV
+            echo 'terraform_ostdout<<EOF' >> $GITHUB_ENV
             echo "${{ steps.validate.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           elif [[ $plan_status -ne 0 ]]
           then
             echo "Error in plan step. Exit code $plan_status."
-            echo "::set-output name=stderr::${{ steps.plan.outputs.stderr }}"
-            echo 'terraform_output<<EOF' >> $GITHUB_ENV
+            echo 'terraform_stderr<<EOF' >> $GITHUB_ENV
+            echo "${{ steps.plan.outputs.stderr }}" >> $GITHUB_ENV
+            echo 'EOF' >> $GITHUB_ENV
+            echo 'terraform_ostdout<<EOF' >> $GITHUB_ENV
             echo "${{ steps.plan.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
           else
             echo "Terraform phase was completed successfully."
-            echo "::set-output name=stderr::${{ steps.plan.outputs.stderr }}"
             echo 'terraform_output<<EOF' >> $GITHUB_ENV
             echo "${{ steps.plan.outputs.stdout }}" >> $GITHUB_ENV
             echo 'EOF' >> $GITHUB_ENV
@@ -159,8 +164,8 @@ jobs:
       - name: Echo status
         run: |
           echo "Terraform running status ${{ steps.status.outputs.exitcode }}"
-          echo "Terraform running stderr ${{ steps.status.outputs.stderr }}"
-          echo "Terraform running stdout ${{ env.terraform_output }}"
+          echo "Terraform running stderr ${{ env.terraform_stderr }}"
+          echo "Terraform running stdout ${{ env.terraform_stdout }}"
 
       # ################################ Aws steps ################################
       # - name: Generate uuid for tmp file name
