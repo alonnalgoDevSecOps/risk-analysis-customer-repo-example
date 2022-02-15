@@ -161,6 +161,14 @@ jobs:
         with:
           name: ${{ github.sha }}
 
+      - name: Store plan's output into file
+        if: steps.status.outputs.exitcode == 0
+        # It's required to use this way to write the plan's output into file as a result that the output is multiline text
+        run: |
+          cat << EOF > /tmp/tf.json.out
+          ${{ steps.plan_to_json.outputs.stdout }}
+          EOF
+
       - name: Copy tmp file into S3
         if: steps.status.outputs.exitcode == 0
         run: |
