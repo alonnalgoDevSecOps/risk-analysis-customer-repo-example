@@ -116,7 +116,7 @@ jobs:
 
       - name: Terraform Status
         id: status
-        shell: bash
+        # shell: bash
         run: |
           init_status=${{ steps.init.outputs.exitcode }}
           validate_status=${{ steps.validate.outputs.exitcode }}
@@ -146,7 +146,7 @@ jobs:
 
           echo "Complete step with exit code ${status}"
           echo "::set-output name=exitcode::${status}"
-          echo 'terraform_output<< EOF' >> $GITHUB_ENV
+          echo 'terraform_output<<EOF' >> $GITHUB_ENV
           echo "${{ steps.plan.outputs.stdout }}" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
 
