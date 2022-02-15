@@ -67,6 +67,9 @@ jobs:
     defaults:
       run:
         working-directory: ${{ matrix.folder }}
+    outputs:
+      tf-status:
+        value: ${{steps.plan_to_json.outputs.plan-json }}
  
     steps:
       - name: Checkout repository
@@ -145,13 +148,14 @@ jobs:
           fi
 
           echo "::set-output name=exitcode::${status}"
-          echo "::set-output name=stdout::'echo ${{ steps.plan.outputs.stdout }}'"
+          echo "::set-output name=tf-status::$(echo ${{ steps.plan.outputs.stdout }})"
 
       - name: Echo status
         run: |
           echo "Terraform running status ${{ steps.status.outputs.exitcode }}"
           echo "Terraform running stderr ${{ steps.status.outputs.stderr }}"
           echo "Terraform running stdout ${{ steps.status.outputs.stdout }}"
+          echo "Terraform plan ${{ outputs.tf-status.value }}"
 
       ################################ Aws steps ################################
       - name: Generate uuid for tmp file name
