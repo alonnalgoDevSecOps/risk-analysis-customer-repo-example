@@ -68,8 +68,7 @@ jobs:
       run:
         working-directory: ${{ matrix.folder }}
     outputs:
-      tf-status:
-        value: ${{steps.plan_to_json.outputs.plan-json }}
+      tf-status: ${{steps.plan_to_json.outputs.plan-json }}
  
     steps:
       - name: Checkout repository
