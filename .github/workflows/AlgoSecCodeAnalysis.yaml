@@ -172,7 +172,7 @@ jobs:
             if [[ ${status^^} == "TRUE" ]];
             then
               result=$(echo $output | jq -r '.result')
-              echo Recieved result: $output
+              echo Recieved result: $result
               result_success=$(echo $result | jq -r '.success')
               echo "sucess: $result_success"
               additions=$(echo $result | jq -r '.additions')
@@ -187,10 +187,10 @@ jobs:
             fi
           done
 
-          if [[ ${status^^} == "TRUE" && $analysis_result ]];
+          if [[ ${status^^} == "TRUE" && $analysis_result == true ]];
           then
             exit_code=0
-            out= "The analysis process was completed successfully"
+            out="The analysis process was completed successfully"
             if [ -z $additions ];
             then
               out= $out'\n'$additions
