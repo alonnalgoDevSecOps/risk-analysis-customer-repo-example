@@ -178,7 +178,7 @@ jobs:
                 echo "additions: $additions"
                 analysis_state=$(echo $additions | jq -r '.analysis_state')
                 echo "analysis state: $analysis_state"
-                analysis_result = $result_success && $analysis_state
+                analysis_result= $result_success && $analysis_state
                 break
               else
                 echo "The result is not ready yet" 
@@ -278,10 +278,3 @@ jobs:
           test ${{ steps.terraform_run.outputs.exitcode }} -eq 0
           echo analysis state: ${{ steps.analysis_status.outputs.exitcode }}
           test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
-
-  Test-Job:
-    needs: [AlgoSec-Code-Analysis]
-    runs-on: ubuntu-latest
-    steps:
-      - name: echo
-        run: echo Finish Process
