@@ -1,5 +1,7 @@
 name: AlgoSec Action
 on: [pull_request]
+env:
+  S3_DEST: devsecops-dev/github-codeanalysis
 jobs:
   changedfiles:
     runs-on: ubuntu-latest
@@ -67,8 +69,6 @@ jobs:
     defaults:
       run:
         working-directory: ${{ matrix.folder }}
-    outputs:
-      tf-status: ${{steps.plan_to_json.outputs.plan-json }}
  
     steps:
       - name: Checkout repository
@@ -88,87 +88,99 @@ jobs:
         with:
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      - name: Terraform Fmt
-        id: fmt
-        run: terraform fmt -check -diff
-        continue-on-error: true
+      # - name: Terraform Fmt
+      #   id: fmt
+      #   run: terraform fmt -check -diff
+      #   continue-on-error: true
 
-      - name: Terraform Init
-        id: init
-        run: terraform init -no-color
-        continue-on-error: true
+      # - name: Terraform Init
+      #   id: init
+      #   run: terraform init -no-color
+      #   continue-on-error: true
 
-      - name: Terraform Validate
-        if: steps.init.outcome != 'failure'
-        id: validate
-        run: terraform validate -no-color
-        continue-on-error: true
+      # - name: Terraform Validate
+      #   if: steps.init.outcome != 'failure'
+      #   id: validate
+      #   run: terraform validate -no-color
+      #   continue-on-error: true
 
-      - name: Terraform Plan
-        if: steps.init.outputs.exitcode == 0 && steps.validate.outputs.exitcode == 0
-        id: plan
-        run: terraform plan -input=false -no-color -out=/tmp/tf.out
-        continue-on-error: true
+      # - name: Terraform Plan
+      #   if: steps.init.outputs.exitcode == 0 && steps.validate.outputs.exitcode == 0
+      #   id: plan
+      #   run: terraform plan -input=false -no-color -out=/tmp/tf.out
+      #   continue-on-error: true
 
-      - name: Terraform Convert Plan to JSON
-        if: steps.init.outputs.exitcode == 0 && steps.validate.outputs.exitcode == 0 && steps.plan.outputs.exitcode == 0
+      # - name: Terraform Convert Plan to JSON
+      #   if: steps.init.outputs.exitcode == 0 && steps.validate.outputs.exitcode == 0 && steps.plan.outputs.exitcode == 0
+      #   id: plan_to_json
+      #   run: terraform show -json /tmp/tf.out
+      #   continue-on-error: true
+
+      - name: Terraform Run
+        id: terraform_run
+        shell: bash
+        run: |
+          tmp_stdout=stdout.txt
+          tmp_stderr=stderr.txt
+
+          # Run command and control its stdout & stderr
+          run_command(){
+              eval "$@" >$tmp_stdout 2>$tmp_stderr
+              return $?
+          }
+
+          # Run command and check its execution state
+          # If command's exit code not 0 - terminate processing and print err and out to the relevant standard stream
+          run_and_check(){
+              if ! run_command  $@; then
+                  echo Command [$*] failed
+                  >&2 cat $tmp_stderr
+                  cat $tmp_stdout
+                  exit 1
+              fi
+          }
+
+          run_and_check terraform init
+          run_command terraform fmt -check -diff
+          run_and_check terraform validate -no-color
+          run_and_check terraform plan -input=false -no-color -out=/tmp/tf.out
+          # run_and_check terraform show -json /tmp/tf.out
+          cat $tmp_stdout
+
+      - name: Terraform Plan Json
+        if: steps.terraform_run.outputs.exitcode == 0
         id: plan_to_json
         run: terraform show -json /tmp/tf.out
-        continue-on-error: true
-
-      - name: Terraform Status
-        id: status
-        run: |
-          init_status=${{ steps.init.outputs.exitcode }}
-          validate_status=${{ steps.validate.outputs.exitcode }}
-          plan_status=${{ steps.plan.outputs.exitcode }}
-
-          status=$( if [[ $init_status -ne 0 || $validate_status -ne 0 || $plan_status -ne 0 ]]; then echo 1; else echo 0; fi )
-          if [[ $init_status -ne 0 ]]
-          # Check the teraform's init, validate and plan steps and initialize terraform_output and terraform_err environment variables
-          then
-            echo "Error in init step. Exit code $init_status."
-          elif [[ $validate_status -ne 0 ]]
-          then
-            echo "Error in validate step. Exit code $validate_status."
-          elif [[ $plan_status -ne 0 ]]
-          then
-            echo "Error in plan step. Exit code $plan_status."
-          else
-            echo "Terraform phase was completed successfully."
-          fi
-
-          echo "::set-output name=exitcode::${status}"
-          echo "::set-output name=tf-status::$(echo ${{ steps.plan.outputs.stdout }})"
 
       - name: Echo status
         run: |
-          echo "Terraform running status ${{ steps.status.outputs.exitcode }}"
-          echo "Terraform running stderr ${{ steps.status.outputs.stderr }}"
-          echo "Terraform running stdout ${{ steps.status.outputs.stdout }}"
-          echo "Terraform plan ${{ needs.AlgoSec-Code-Analysis.outputs.tf-status }}"
+          echo "Terraform running status ${{ steps.terraform_run.outputs.exitcode }}"
+          echo "Terraform running stderr ${{ steps.terraform_run.outputs.stderr }}"
+          echo "Terraform running stdout ${{ steps.terraform_run.outputs.stdout }}"
+          echo "Terraform running stdout ${{ steps.plan_to_json.outputs.exitcode }}"
+          echo "Terraform running stdout ${{ steps.plan_to_json.outputs.stdout }}"
 
       ################################ Aws steps ################################
-      - name: Generate uuid for tmp file name
-        if: steps.status.outputs.exitcode == 0
-        id: generate-uuid
-        uses: filipstefansson/uuid-action@v1
-        with:
-          name: ${{ github.sha }}
+      # - name: Generate uuid for tmp file name
+      #   if: steps.status.outputs.exitcode == 0
+      #   id: generate-uuid
+      #   uses: filipstefansson/uuid-action@v1
+      #   with:
+      #     name: ${{ github.sha }}
 
-      - name: Store plan's output into file
-        if: steps.status.outputs.exitcode == 0
-        # It's required to use this way to write the plan's output into file as a result that the output is multiline text
-        run: |
-          cat << EOF > /tmp/tf.json.out
-          ${{ steps.plan_to_json.outputs.stdout }}
-          EOF
+      # - name: Store plan's output into file
+      #   if: steps.status.outputs.exitcode == 0
+      #   # It's required to use this way to write the plan's output into file as a result that the output is multiline text
+      #   run: |
+      #     cat << EOF > /tmp/tf.json.out
+      #     ${{ steps.plan_to_json.outputs.stdout }}
+      #     EOF
 
-      - name: Copy tmp file into S3
-        if: steps.status.outputs.exitcode == 0
-        run: |
-          cat /tmp/tf.json.out
-      #     aws s3 cp /tmp/tf.json.out s3://devsecops-dev/github-codeanalysis/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
+      # - name: Copy tmp file into S3
+      #   if: steps.status.outputs.exitcode == 0
+      #   run: |
+      #     cat /tmp/tf.json.out
+      #     aws s3 cp /tmp/tf.json.out s3://${{env.S3_DEST}}/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       # - name: Wait till analysis complete
       #   if: steps.status.outputs.exitcode == 0
