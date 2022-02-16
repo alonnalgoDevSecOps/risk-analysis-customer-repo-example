@@ -174,43 +174,44 @@ jobs:
             status=$(echo $output | jq -r '.message_found')
             status=boolean $status
             echo status=$status
+
             if $status
-              then
-                echo Recieved result: $output
-                result=$(echo $output | jq -r '.result')
-                result=boolean $result
-                #echo "full result: $result"
-                result_success=$(echo $result | jq -r '.success')
-                result_success=boolean $result_success
-                echo "sucess: $result_success"
-                additions=$(echo $result | jq -r '.additions')
-                echo "additions: $additions"
-                analysis_state=$(echo $additions | jq -r '.analysis_state')
-                analysis_state=boolean $analysis_state
-                echo "analysis state: $analysis_state"
-                if $result_success && $analysis_state; then analysis_result=true; else analysis_result=false; fi
-                echo Aggregated analysis result: $analysis_result
-                break
-              else
-                echo "The result is not ready yet" 
-                sleep 30
+            then
+              echo Recieved result: $output
+              result=$(echo $output | jq -r '.result')
+              result=boolean $result
+              #echo "full result: $result"
+              result_success=$(echo $result | jq -r '.success')
+              result_success=boolean $result_success
+              echo "sucess: $result_success"
+              additions=$(echo $result | jq -r '.additions')
+              echo "additions: $additions"
+              analysis_state=$(echo $additions | jq -r '.analysis_state')
+              analysis_state=boolean $analysis_state
+              echo "analysis state: $analysis_state"
+              if $result_success && $analysis_state; then analysis_result=true; else analysis_result=false; fi
+              echo Aggregated analysis result: $analysis_result
+              break
+            else
+              echo "The result is not ready yet" 
+              sleep 30
             fi
           done
 
           if $status && $analysis_result
+          then
+            exit_code=0
+            out= "The analysis process was completed successfully"
+            if [ -z $additions ]
             then
-              exit_code=0
-              out= "The analysis process was completed successfully"
-              if [ -z $additions ]
-              then
-                out= $out'\n'$additions
-              fi
-              echo $out
-              echo "::set-output name=stdout::${out}"
-            else
-              echo Process failed
-              exit_code=1
-              echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
+              out= $out'\n'$additions
+            fi
+            echo $out
+            echo "::set-output name=stdout::${out}"
+          else
+            echo Process failed
+            exit_code=1
+            echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
           fi
 
           echo "::set-output name=exitcode::${exit_code}"
