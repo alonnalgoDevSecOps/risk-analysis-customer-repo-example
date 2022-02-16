@@ -133,10 +133,13 @@ jobs:
           # If command's exit code not 0 - terminate processing and print err and out to the relevant standard stream
           run_and_check(){
               if ! run_command  $@; then
-                  echo Command [$*] failed
-                  >&2 cat $tmp_stderr
-                  cat $tmp_stdout
-                  exit 1
+                echo Command [$*] failed
+                >&2 cat $tmp_stderr
+                cat $tmp_stdout
+                exit 1
+              else
+                echo Command [$*] completed
+                cat $tmp_stdout
               fi
           }
 
