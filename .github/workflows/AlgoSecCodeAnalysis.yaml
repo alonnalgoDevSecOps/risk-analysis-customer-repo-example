@@ -170,17 +170,17 @@ jobs:
             if [ $status = "true" ]
               then
                 result=$(echo $output | jq -r '.result');
-                echo "full result: $result"
+                #echo "full result: $result"
                 result_success=$(echo $result | jq -r '.success')
-                echo "sucess: $result_success"
+                #echo "sucess: $result_success"
                 additions=$(echo $result | jq -r '.additions')
-                echo "additions: $additions"
+                #echo "additions: $additions"
                 analysis_state=$(cat output.txt | jq -r '.analysis_state')
-                echo "analysis state: $analysis_state"
+                #echo "analysis state: $analysis_state"
                 analysis_result = ${result_success} && $analysis_state
                 break
               else
-                echo "The result is not ready yet" 
+                #echo "The result is not ready yet" 
                 sleep 30
             fi
           done
@@ -199,8 +199,6 @@ jobs:
 
           echo "::set-output name=exitcode::${exit_code}"
           echo "::set-output name=report::${additions}"
-
-          exit $exit_code
         continue-on-error: true
 
       - name: Echo status
