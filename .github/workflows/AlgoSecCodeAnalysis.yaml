@@ -169,7 +169,7 @@ jobs:
             echo $output
             status=$(echo $output | jq -r '.message_found')
 
-            if [[ ${status^^}=="TRUE" ]]
+            if [[ ${status^^} == "TRUE" ]]
             then
               echo Recieved result: $output
               result=$(echo $output | jq -r '.result')
@@ -180,7 +180,7 @@ jobs:
               echo "additions: $additions"
               analysis_state=$(echo $additions | jq -r '.analysis_state')
               echo "analysis state: $analysis_state"
-              if [[ ${result_success^^}=="TRUE" && ${analysis_state^^}=="TRUE" ]]; then analysis_result=true; else analysis_result=false; fi
+              if [[ ${result_success^^} == "TRUE" && ${analysis_state^^} == "TRUE" ]]; then analysis_result=true; else analysis_result=false; fi
               echo Aggregated analysis result: $analysis_result
               break
             else
@@ -189,7 +189,7 @@ jobs:
             fi
           done
 
-          if [[ ${status^^}=="TRUE" && $analysis_result ]]
+          if [[ ${status^^} == "TRUE" && $analysis_result ]]
           then
             exit_code=0
             out= "The analysis process was completed successfully"
