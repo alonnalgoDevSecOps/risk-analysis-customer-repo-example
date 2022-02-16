@@ -138,14 +138,14 @@ jobs:
 
       ################################ Aws steps ################################
       - name: Generate uuid for tmp file name
-        if: steps.status.outputs.exitcode == 0
+        if: steps.terraform_run.outputs.exitcode == 0
         id: generate-uuid
         uses: filipstefansson/uuid-action@v1
         with:
           name: ${{ github.sha }}
 
       - name: Store plan's output into file
-        if: steps.status.outputs.exitcode == 0
+        if: steps.terraform_run.outputs.exitcode == 0
         # It's required to use this way to write the plan's output into file as a result that the output is multiline text
         run: |
           cat << EOF > /tmp/tf.json.out
@@ -153,13 +153,13 @@ jobs:
           EOF
 
       - name: Copy tmp file into S3
-        if: steps.status.outputs.exitcode == 0
+        if: steps.terraform_run.outputs.exitcode == 0
         run: |
           cat /tmp/tf.json.out
           aws s3 cp /tmp/tf.json.out s3://${{env.S3_DEST}}/tmp${{ steps.generate-uuid.outputs.uuid }}.out --metadata customer=${{ github.repository_owner }},action_id=${{ steps.generate-uuid.outputs.uuid }}
 
       - name: Wait till analysis complete
-        if: steps.status.outputs.exitcode == 0
+        if: steps.terraform_run.outputs.exitcode == 0
         id: analysis_status
         shell: bash
         run: |
@@ -202,6 +202,13 @@ jobs:
 
           exit $exit_code
         continue-on-error: true
+
+      - name: Echo status
+        run: |
+          echo "Analyser status ${{ steps.analysis_status.outputs.exitcode }}"
+          echo "Analyser stderr ${{ steps.analysis_status.outputs.stderr }}"
+          echo "Analyser stdout ${{ steps.analysis_status.outputs.stdout }}"
+          echo "Analyser report ${{ steps.analysis_status.outputs.report }}"
 
       ################################ Update PR and complete the job ################################
       - name: Comment on PR
@@ -265,10 +272,10 @@ jobs:
               body: output
             })
 
-      - name: Check Teraform results
+      - name: Check Results
         shell: bash
         run: |
-          echo terraform state: ${{ steps.status.outputs.exitcode }}
-          test ${{ steps.plan.outputs.exitcode }} -eq 0
+          echo terraform state: ${{ steps.terraform_run.outputs.exitcode }}
+          test ${{ steps.terraform_run.outputs.exitcode }} -eq 0
           echo analysis state: ${{ steps.analysis_status.outputs.exitcode }}
           test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
