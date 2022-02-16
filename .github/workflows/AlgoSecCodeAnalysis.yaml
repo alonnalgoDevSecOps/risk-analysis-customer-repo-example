@@ -164,6 +164,7 @@ jobs:
         shell: bash
         run: |
           function boolean() {
+            echo convert ${@1^^} value
             if [[ ${@1^^} == "TRUE" ]]; then return 0; else return 1;fi
           }
 
@@ -171,6 +172,7 @@ jobs:
           do
             output=$(curl -s "${{env.API_URL}}?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
             status=boolean $(echo $output | jq -r '.message_found');
+            echo status=$status
             if [ $status ]
               then
                 echo Recieved result: $output
