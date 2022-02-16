@@ -163,33 +163,24 @@ jobs:
         id: analysis_status
         shell: bash
         run: |
-          function boolean() {
-            if [[ ${1^^} == "TRUE" ]]; then return 0; else return 1;fi
-          }
-
           for(( i=1; i<=10; i++ ))
           do
             output=$(curl -s "${{env.API_URL}}?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
             echo $output
             status=$(echo $output | jq -r '.message_found')
-            status=boolean $status
-            echo status=$status
 
-            if $status
+            if [[ ${status^^}=="TRUE" ]]
             then
               echo Recieved result: $output
               result=$(echo $output | jq -r '.result')
-              result=boolean $result
               #echo "full result: $result"
               result_success=$(echo $result | jq -r '.success')
-              result_success=boolean $result_success
               echo "sucess: $result_success"
               additions=$(echo $result | jq -r '.additions')
               echo "additions: $additions"
               analysis_state=$(echo $additions | jq -r '.analysis_state')
-              analysis_state=boolean $analysis_state
               echo "analysis state: $analysis_state"
-              if $result_success && $analysis_state; then analysis_result=true; else analysis_result=false; fi
+              if [[ ${result_success^^}=="TRUE" && ${analysis_state^^}=="TRUE" ]]; then analysis_result=true; else analysis_result=false; fi
               echo Aggregated analysis result: $analysis_result
               break
             else
@@ -198,7 +189,7 @@ jobs:
             fi
           done
 
-          if $status && $analysis_result
+          if [[ ${status^^}=="TRUE" && $analysis_result ]]
           then
             exit_code=0
             out= "The analysis process was completed successfully"
