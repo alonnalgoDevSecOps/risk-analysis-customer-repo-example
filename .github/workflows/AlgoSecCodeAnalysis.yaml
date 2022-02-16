@@ -125,6 +125,7 @@ jobs:
 
           # Run command and control its stdout & stderr
           run_command(){
+              echo  Run "$@"
               eval "$@" >$tmp_stdout 2>$tmp_stderr
               return $?
           }
