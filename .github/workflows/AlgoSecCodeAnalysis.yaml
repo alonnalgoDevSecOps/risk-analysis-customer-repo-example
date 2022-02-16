@@ -166,19 +166,19 @@ jobs:
           for(( i=1; i<=10; i++ ))
           do
             output=$(curl -s "${{env.API_URL}}?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
-            echo Recieved result: $output
             status=$(echo $output | jq -r '.message_found');
             if [ $status = "true" ]
               then
+                echo Recieved result: $output
                 result=$(echo $output | jq -r '.result');
                 #echo "full result: $result"
                 result_success=$(echo $result | jq -r '.success')
                 #echo "sucess: $result_success"
                 additions=$(echo $result | jq -r '.additions')
                 #echo "additions: $additions"
-                analysis_state=$(echo $result | jq -r '.analysis_state')
+                analysis_state=$(echo $additions | jq -r '.analysis_state')
                 #echo "analysis state: $analysis_state"
-                analysis_result = ${result_success} && $analysis_state
+                analysis_result = $result_success && $analysis_state
                 break
               else
                 #echo "The result is not ready yet" 
