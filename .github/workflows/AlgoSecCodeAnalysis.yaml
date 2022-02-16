@@ -171,7 +171,7 @@ jobs:
               then
                 echo Recieved result: $output
                 result=$(echo $output | jq -r '.result');
-                echo "full result: $result"
+                #echo "full result: $result"
                 result_success=$(echo $result | jq -r '.success')
                 echo "sucess: $result_success"
                 additions=$(echo $result | jq -r '.additions')
@@ -186,14 +186,16 @@ jobs:
             fi
           done
 
-          if [ $status = "true" && $analysis_result = "true" ]
+          if [[ $status = "true" && $analysis_result = "true" ]]
             then
               exit_code=0
               out = "The analysis process was completed successfully"
               if [ -z $additions ]
                 out = $out'\n'$additions
+              echo $out
               echo "::set-output name=stdout::${out}"
             else
+              echo Process failed
               exit_code=1
               echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
           fi
