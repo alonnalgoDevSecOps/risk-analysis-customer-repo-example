@@ -139,8 +139,8 @@ jobs:
                 cat $tmp_stdout
                 exit 1
               else
-                echo Command [$*] completed
                 cat $tmp_stdout
+                echo Command [$*] completed
               fi
           }
 
