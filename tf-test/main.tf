@@ -4,7 +4,7 @@ provider "aws" {
 
 variable "for_test" {
   type    = string
-  default= "test"
+  default = "test"
 }
 
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
@@ -12,22 +12,22 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   enabled             = true
   retain_on_delete    = false
   is_ipv6_enabled     = false
-  default_root_object = "${var.default_root_object}"
+  default_root_object = var.default_root_object
 
   logging_config {
-    bucket          = "${var.logging_bucket_domain_name}"
-    prefix          = "${var.logging_bucket_prefix}"
+    bucket = var.logging_bucket_domain_name
+    prefix = var.logging_bucket_prefix
   }
 
-  aliases = "${var.aliases}"
-  price_class = "${var.price_class}"
+  aliases     = var.aliases
+  price_class = var.price_class
 
   origin {
-    domain_name = "${var.webapp_s3_bucket}"
+    domain_name = var.webapp_s3_bucket
     origin_id   = "${var.webapp_s3_bucket}/cloudflow"
   }
 
-/*  origin {
+  /*  origin {
     domain_name = "${var.custom_domain_name}"
     origin_id = "${var.custom_domain_name}/cloudflow"
     origin_path = "${var.origin_path}"
@@ -44,25 +44,25 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
   }
 */
   default_cache_behavior {
-    allowed_methods = "${var.allowed_methods}"
+    allowed_methods  = var.allowed_methods
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.webapp_s3_bucket}"
+    target_origin_id = var.webapp_s3_bucket
 
     forwarded_values {
-      query_string = "${var.query_string}"
+      query_string = var.query_string
 
       cookies {
-        forward = "${var.cookies}"
+        forward = var.cookies
       }
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    min_ttl                = "${var.min_ttl}"
-    default_ttl            = "${var.default_ttl}"
-    max_ttl                = "${var.max_ttl}"
+    min_ttl                = var.min_ttl
+    default_ttl            = var.default_ttl
+    max_ttl                = var.max_ttl
   }
 
-/*  ordered_cache_behavior {
+  /*  ordered_cache_behavior {
     path_pattern     = "/api/*"
     allowed_methods  = "${var.allowed_methods}"
     cached_methods   = ["GET", "HEAD"]
@@ -84,14 +84,14 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
 
   restrictions {
     geo_restriction {
-      restriction_type = "${var.restriction_type}"
-      locations        = "${var.locations}"
+      restriction_type = var.restriction_type
+      locations        = var.locations
     }
   }
 
   viewer_certificate {
-    acm_certificate_arn = "${var.acm_certificate_arn}"
-    ssl_support_method = "sni-only"
+    acm_certificate_arn = var.acm_certificate_arn
+    ssl_support_method  = "sni-only"
   }
 }
 
