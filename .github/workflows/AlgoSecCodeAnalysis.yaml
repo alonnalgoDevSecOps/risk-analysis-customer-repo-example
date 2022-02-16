@@ -178,7 +178,7 @@ jobs:
                 echo "additions: $additions"
                 analysis_state=$(echo $additions | jq -r '.analysis_state')
                 echo "analysis state: $analysis_state"
-                analysis_result= $($result_success && $analysis_state)
+                ((analysis_result=$result_success&&$analysis_state))
                 echo Aggregated analysis result: $analysis_result
                 break
               else
