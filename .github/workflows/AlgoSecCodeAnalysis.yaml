@@ -277,3 +277,10 @@ jobs:
           test ${{ steps.terraform_run.outputs.exitcode }} -eq 0
           echo analysis state: ${{ steps.analysis_status.outputs.exitcode }}
           test ${{ steps.analysis_status.outputs.exitcode }} -eq 0
+
+  Test-Job:
+    needs: [AlgoSec-Code-Analysis]
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo
+        run: echo Finish Process
