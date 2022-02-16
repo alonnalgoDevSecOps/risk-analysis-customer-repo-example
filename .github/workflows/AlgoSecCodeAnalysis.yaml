@@ -146,6 +146,7 @@ jobs:
           run_and_check terraform plan -input=false -no-color -out=/tmp/tf.out
           # run_and_check terraform show -json /tmp/tf.out
           cat $tmp_stdout
+          exit 0
 
       - name: Terraform Plan Json
         if: steps.terraform_run.outputs.exitcode == 0
