@@ -169,11 +169,10 @@ jobs:
             echo $output
             status=$(echo $output | jq -r '.message_found')
 
-            if [[ ${status^^} == "TRUE" ]]
+            if [[ ${status^^} == "TRUE" ]];
             then
-              echo Recieved result: $output
               result=$(echo $output | jq -r '.result')
-              #echo "full result: $result"
+              echo Recieved result: $output
               result_success=$(echo $result | jq -r '.success')
               echo "sucess: $result_success"
               additions=$(echo $result | jq -r '.additions')
@@ -184,16 +183,15 @@ jobs:
               echo Aggregated analysis result: $analysis_result
               break
             else
-              echo "The result is not ready yet" 
               sleep 30
             fi
           done
 
-          if [[ ${status^^} == "TRUE" && $analysis_result ]]
+          if [[ ${status^^} == "TRUE" && $analysis_result ]];
           then
             exit_code=0
             out= "The analysis process was completed successfully"
-            if [ -z $additions ]
+            if [ -z $additions ];
             then
               out= $out'\n'$additions
             fi
@@ -202,7 +200,7 @@ jobs:
           else
             echo Process failed
             exit_code=1
-            echo "::set-output name=stderr::$(printf "The analysis process failed.\nWith additional information: $additions\n")"
+            echo "::set-output name=stderr::$(echo "The analysis process failed.\nWith additional information: $additions\n")"
           fi
 
           echo "::set-output name=exitcode::${exit_code}"
