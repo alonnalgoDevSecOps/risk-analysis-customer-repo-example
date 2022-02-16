@@ -166,6 +166,7 @@ jobs:
           for(( i=1; i<=10; i++ ))
           do
             output=$(curl -s "${{env.API_URL}}?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
+            echo Recieved result: $output
             status=$(echo $output | jq -r '.message_found');
             if [ $status = "true" ]
               then
@@ -175,7 +176,7 @@ jobs:
                 #echo "sucess: $result_success"
                 additions=$(echo $result | jq -r '.additions')
                 #echo "additions: $additions"
-                analysis_state=$(cat output.txt | jq -r '.analysis_state')
+                analysis_state=$(echo $result | jq -r '.analysis_state')
                 #echo "analysis state: $analysis_state"
                 analysis_result = ${result_success} && $analysis_state
                 break
