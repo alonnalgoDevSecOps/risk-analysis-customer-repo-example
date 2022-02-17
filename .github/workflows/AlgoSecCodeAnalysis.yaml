@@ -255,13 +255,16 @@ jobs:
               converted_servirity=$(convert_severity $severity)
 
               # Print converted json by markdown syntax
-              echo -e "- [:$converted_servirity:] ***$risk_id***" >> /tmp/analysis_report.txt
-              echo -e '**'"$title"'**' >> /tmp/analysis_report.txt
-              echo -e '**'Description:'**' >> /tmp/analysis_report.txt
+              echo -e "<details open="true">" >> /tmp/analysis_report.txt
+              echo -e "<summary>:$converted_servirity: $risk_id</summary>" >> /tmp/analysis_report.txt
+              echo -e "" >> /tmp/analysis_report.txt
+              echo -e "###### $risk_id" >> /tmp/analysis_report.txt
+              echo -e "$title"' >> /tmp/analysis_report.txt
+              echo -e '###### Description:' >> /tmp/analysis_report.txt
               echo -e "$description" >> /tmp/analysis_report.txt
-              echo -e '**'Recommendation:'**' >> /tmp/analysis_report.txt
+              echo -e '###### Recommendation:' >> /tmp/analysis_report.txt
               echo -e "$recommendation" >> /tmp/analysis_report.txt
-              echo -e '**'Details:'**' >> /tmp/analysis_report.txt
+              echo -e '###### Details:' >> /tmp/analysis_report.txt
               echo -e '```json' >> /tmp/analysis_report.txt
               echo -e "$items" >> /tmp/analysis_report.txt
               echo -e '```' >> /tmp/analysis_report.txt
@@ -297,7 +300,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const CODE_BLOCK = '```';
-            const terraform_result = (${ env.terraform_status } == 0) ? ':heavy_check_mark:' : ':x:';
+            const terraform_result = (${{ env.terraform_status }} == 0) ? ':heavy_check_mark:' : ':x:';
             const analysis_result = (${{ env.analysis_status }} == 0) ? ':heavy_check_mark:' : ':x:';
             
             const fs = require('fs')
@@ -305,6 +308,12 @@ jobs:
 
             const output = `
             ##  ${ analysis_result } Code Analysis 🎨
+            <details open="true">
+            <summary>Report</summary>
+
+            ${ analysis_report }
+            </details>
+
             <details>
             <summary>Logs</summary>
             Output
@@ -319,12 +328,6 @@ jobs:
             ${{ env.analysis_err }}
             ${ CODE_BLOCK }
 
-            </details>
-
-            <details open="true">
-            <summary>Report</summary>
-
-            ${ analysis_report }
             </details>
 
             ## ${ terraform_result } Terraform Processing ⚙️
