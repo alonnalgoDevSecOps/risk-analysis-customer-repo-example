@@ -297,8 +297,8 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const CODE_BLOCK = '```';
-            const terraform_result = '${ env.terraform_status } == 0 ' ? ':heavy_check_mark:' : ':x:';
-            const analysis_result = '${{ env.analysis_status }} == 0' ? ':heavy_check_mark:' : ':x:';
+            const terraform_result = (${ env.terraform_status } == 0) ? ':heavy_check_mark:' : ':x:';
+            const analysis_result = (${{ env.analysis_status }} == 0) ? ':heavy_check_mark:' : ':x:';
             
             const fs = require('fs')
             const analysis_report = fs.readFileSync('/tmp/analysis_report.txt', 'utf8')
