@@ -299,6 +299,7 @@ jobs:
             const terraform_result = '${ process.env.terraform_status } == 0 ' ? ':heavy_check_mark:' : ':x:';
             const analysis_result = '${ process.env.analysis_status } == 0' ? ':heavy_check_mark:' : ':x:';
             
+            const fs = require('fs')
             const analysis_report = fs.readFileSync('/Users/joe/test.txt', 'utf8')
 
             const output = `
