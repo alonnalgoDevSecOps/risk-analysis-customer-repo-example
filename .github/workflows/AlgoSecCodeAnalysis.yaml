@@ -1,4 +1,4 @@
-name: AlgoSec Action
+name: AlgoSec
 on:
   pull_request:
     branches:
