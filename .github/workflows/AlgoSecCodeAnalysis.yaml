@@ -334,7 +334,7 @@ jobs:
 
             Report
             ${ CODE_BLOCK }
-            ${{ env.analysis_report }}
+            ${ analysis_report }
             ${ CODE_BLOCK }
 
             </details>
