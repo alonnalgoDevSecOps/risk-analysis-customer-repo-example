@@ -299,7 +299,7 @@ jobs:
             const terraform_result = '${ process.env.terraform_status } == 0 ' ? ':heavy_check_mark:' : ':x:';
             const analysis_result = '${ process.env.analysis_status } == 0' ? ':heavy_check_mark:' : ':x:';
             
-            analysis_report=$(</tmp/analysis_report.txt)
+            const analysis_report = fs.readFileSync('/Users/joe/test.txt', 'utf8')
 
             const output = `
             ## ${ terraform_result } Terraform Processing ⚙️
