@@ -259,7 +259,7 @@ jobs:
               echo -e "<summary>:$converted_servirity: $risk_id</summary>" >> /tmp/analysis_report.txt
               echo -e "" >> /tmp/analysis_report.txt
               echo -e "###### $risk_id" >> /tmp/analysis_report.txt
-              echo -e "$title"' >> /tmp/analysis_report.txt
+              echo -e "$title" >> /tmp/analysis_report.txt
               echo -e '###### Description:' >> /tmp/analysis_report.txt
               echo -e "$description" >> /tmp/analysis_report.txt
               echo -e '###### Recommendation:' >> /tmp/analysis_report.txt
