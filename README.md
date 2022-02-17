@@ -1,7 +1,4 @@
 
-[![AlgoSecCodeAnalysis Actions status](https://github.com/VITALYALGOSEC/checkpullrequest/workflows/AlgoSecCodeAnalysis/badge.svg)](https://github.com/VITALYALGOSEC/checkpullrequest/actions)
+[![AlgoSec Actions status](https://github.com/VITALYALGOSEC/checkpullrequest/workflows/AlgoSec/badge.svg)](https://github.com/VITALYALGOSEC/checkpullrequest/actions)
 
-[![Android Actions status](https://github.com/AndreSand/BornInApp/workflows/android/badge.svg)](https://github.com/AndreSand/BornInApp/actions)
-
-"# checkpullrequest" 
-bla bla bla
+This cute repo has been created to demontrate the AlgoSec's DevSecOps Solution
