@@ -195,12 +195,12 @@ jobs:
             then
               out= $out'\n'$additions
             fi
-            echo $out
+            echo Stdout: $out
             echo "::set-output name=stdout::${out}"
           else
             echo Process failed
             exit_code=1
-            echo "::set-output name=stderr::$(echo "The analysis process failed.\nWith additional information: $additions\n")"
+            echo "::set-output name=stderr::$(echo "The analysis process completed with error. Check report")"
           fi
 
           echo "::set-output name=exitcode::${exit_code}"
@@ -250,21 +250,24 @@ jobs:
 
             </details> <!-- End Format Logs -->
 
-            ###  ${ analysis_result }: Code Analysis 🎨
+            ###  ${ analysis_result } Code Analysis 🎨
             <details><summary>Logs</summary>
             Output
 
             ${ CODE_BLOCK }
-            ${ process.env.analysis_out }
+            ${{ env.analysis_out }}
             ${ CODE_BLOCK }
 
             Errors
 
             ${ CODE_BLOCK }
-            ${ process.env.analysis_err }
+            ${{ env.analysis_err }}
             ${ CODE_BLOCK }
 
-            ${ process.env.analysis_report }
+            Report
+            ${ CODE_BLOCK }
+            ${{ env.analysis_report }}
+            ${ CODE_BLOCK }
 
             </details>
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
