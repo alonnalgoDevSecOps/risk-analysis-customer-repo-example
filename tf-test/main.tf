@@ -27,22 +27,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     origin_id   = "${var.webapp_s3_bucket}/cloudflow"
   }
 
-/*  origin {
-    domain_name = "${var.custom_domain_name}"
-    origin_id = "${var.custom_domain_name}/cloudflow"
-    origin_path = "${var.origin_path}"
-
-    custom_origin_config {
-      origin_protocol_policy = "https-only"
-      http_port = "80"
-      https_port = "443"
-      origin_ssl_protocols = [
-        "TLSv1.2",
-        "TLSv1.1",
-        "TLSv1"]
-    }
-  }
-*/
   default_cache_behavior {
     allowed_methods = "${var.allowed_methods}"
     cached_methods   = ["GET", "HEAD"]
@@ -62,26 +46,6 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     max_ttl                = "${var.max_ttl}"
   }
 
-/*  ordered_cache_behavior {
-    path_pattern     = "/api/*"
-    allowed_methods  = "${var.allowed_methods}"
-    cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${var.custom_domain_name}"
-
-    forwarded_values {
-      query_string = "${var.query_string}"
-
-      cookies {
-        forward = "${var.cookies}"
-      }
-    }
-
-    min_ttl                = "${var.min_ttl}"
-    default_ttl            = "${var.default_ttl}"
-    max_ttl                = "${var.max_ttl}"
-    viewer_protocol_policy = "redirect-to-https"
-  } */
-
   restrictions {
     geo_restriction {
       restriction_type = "${var.restriction_type}"
@@ -100,15 +64,15 @@ resource "aws_security_group" "devsecops_test" {
   description = "Display devsecops "
   vpc_id      = "vpc-12345678"
   ingress {
-    from_port   = 100
-    to_port     = 100
+    from_port   = 4321
+    to_port     = 4321
     protocol    = "tcp"
     cidr_blocks = ["172.31.0.0/16"]
-    description = "Raise 100 risk"
+    description = ""
   }
   egress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = 9876
+    to_port     = 9876
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Outgoing traffic"
