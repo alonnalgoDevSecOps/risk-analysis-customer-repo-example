@@ -307,7 +307,7 @@ jobs:
             const analysis_report = fs.readFileSync('/tmp/analysis_report.txt', 'utf8')
 
             const output = `
-            ##  ${ analysis_result } Code Analysis 🎨
+            ##  ${ analysis_result } Code Analysis :cop:
             <details open="true">
             <summary>Report</summary>
 
