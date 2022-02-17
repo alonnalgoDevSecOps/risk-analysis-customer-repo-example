@@ -323,6 +323,7 @@ jobs:
 
             <details open="true">
             <summary>Report</summary>
+            
             ${ analysis_report }
             </details>
 
