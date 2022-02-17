@@ -333,12 +333,14 @@ jobs:
             ${{ env.analysis_err }}
             ${ CODE_BLOCK }
 
-            Report
+            </details>
+
+            <details><summary>Report</summary>
+            
             ${ CODE_BLOCK }
             ${ analysis_report }
             ${ CODE_BLOCK }
 
-            </details>
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
             github.rest.issues.createComment({
