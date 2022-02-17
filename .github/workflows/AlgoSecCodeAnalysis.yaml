@@ -188,7 +188,7 @@ jobs:
               echo Aggregated analysis result: $analysis_result
               break
             else
-              sleep 30
+              sleep 10
             fi
           done
 
