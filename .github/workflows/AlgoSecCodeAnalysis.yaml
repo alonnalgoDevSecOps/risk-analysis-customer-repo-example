@@ -255,23 +255,23 @@ jobs:
               converted_servirity=$(convert_severity $severity)
 
               # Print converted json by markdown syntax
-              echo "- [:$converted_servirity:] ***$risk_id***"
-              echo '**'"$title"'**'
-              echo '**'Description:'**'
-              echo "$description"
-              echo '**'Recommendation:'**'
-              echo "$recommendation"
-              echo '**'Details:'**'
-              echo '```json'
-              echo "$items"
-              echo '```'
+              echo -e "- [:$converted_servirity:] ***$risk_id***" >> /tmp/analysis_report.txt
+              echo -e '**'"$title"'**' >> /tmp/analysis_report.txt
+              echo -e '**'Description:'**' >> /tmp/analysis_report.txt
+              echo -e "$description" >> /tmp/analysis_report.txt
+              echo -e '**'Recommendation:'**' >> /tmp/analysis_report.txt
+              echo -e "$recommendation" >> /tmp/analysis_report.txt
+              echo -e '**'Details:'**' >> /tmp/analysis_report.txt
+              echo -e '```json' >> /tmp/analysis_report.txt
+              echo -e "$items" >> /tmp/analysis_report.txt
+              echo -e '```' >> /tmp/analysis_report.txt
           done
 
-          echo "> **Severity descriptions**"
-          echo ">> :boom: - critical"
-          echo ">> :fire: - high"
-          echo ">> :exclamation: - medium"
-          echo ">> :grey_question: - low"
+          echo -e "> **Severity descriptions**" >> /tmp/analysis_report.txt
+          echo -e ">> :boom: - critical" >> /tmp/analysis_report.txt
+          echo -e ">> :fire: - high" >> /tmp/analysis_report.txt
+          echo -e ">> :exclamation: - medium" >> /tmp/analysis_report.txt
+          echo -e ">> :grey_question: - low" >> /tmp/analysis_report.txt
 
 
 
@@ -280,7 +280,6 @@ jobs:
           echo "Analyser status ${{ steps.analysis_status.outputs.exitcode }}"
           echo "Analyser stderr ${{ steps.analysis_status.outputs.stderr }}"
           echo "Analyser stdout ${{ steps.analysis_status.outputs.stdout }}"
-          echo "Analyser report ${{ steps.analysis_report.outputs.report }}"
 
       ################################ Update PR and complete the job ################################
       - name: Comment on PR
@@ -293,13 +292,14 @@ jobs:
           analysis_status: ${{ steps.analysis_status.outputs.exitcode}}
           analysis_out: ${{ steps.analysis_status.outputs.stdout}}
           analysis_err: ${{ steps.analysis_status.outputs.stderr}}
-          analysis_report: ${{ steps.analysis_report.outputs.stdout}}
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const CODE_BLOCK = '```';
             const terraform_result = '${ process.env.terraform_status } == 0 ' ? ':heavy_check_mark:' : ':x:';
             const analysis_result = '${ process.env.analysis_status } == 0' ? ':heavy_check_mark:' : ':x:';
+            
+            analysis_report=$(</tmp/analysis_report.txt)
 
             const output = `
             ## ${ terraform_result } Terraform Processing ⚙️
