@@ -284,6 +284,7 @@ jobs:
       ################################ Update PR and complete the job ################################
       - name: Comment on PR
         # update Pull Request by the operation status
+        # this code is using Node.js
         uses: actions/github-script@v5
         env:
           terraform_status: ${{ steps.terraform_run.outputs.exitcode }}
@@ -303,6 +304,28 @@ jobs:
             const analysis_report = fs.readFileSync('/tmp/analysis_report.txt', 'utf8')
 
             const output = `
+            ##  ${ analysis_result } Code Analysis 🎨
+            <details>
+            <summary>Logs</summary>
+            Output
+
+            ${ CODE_BLOCK }
+            ${{ env.analysis_out }}
+            ${ CODE_BLOCK }
+
+            Errors
+
+            ${ CODE_BLOCK }
+            ${{ env.analysis_err }}
+            ${ CODE_BLOCK }
+
+            </details>
+
+            <details open="true">
+            <summary>Report</summary>
+            ${ analysis_report }
+            </details>
+
             ## ${ terraform_result } Terraform Processing ⚙️
             <details><summary>Terraform Log</summary>
             Output
@@ -318,28 +341,6 @@ jobs:
             ${ CODE_BLOCK }
 
             </details> <!-- End Format Logs -->
-
-            ##  ${ analysis_result } Code Analysis 🎨
-            <details><summary>Logs</summary>
-            Output
-
-            ${ CODE_BLOCK }
-            ${{ env.analysis_out }}
-            ${ CODE_BLOCK }
-
-            Errors
-
-            ${ CODE_BLOCK }
-            ${{ env.analysis_err }}
-            ${ CODE_BLOCK }
-
-            </details>
-
-            <details><summary>Report</summary>
-
-            ${ analysis_report }
-
-            </details>
 
             *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ env.tf_actions_working_dir }}\`, Workflow: \`${{ github.workflow }}\`*`;
 
