@@ -78,8 +78,8 @@ resource "aws_security_group" "devsecops_test" {
     description = "Outgoing traffic"
   }
   egress {
-    from_port   = 100
-    to_port     = 100
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["10.31.10.0/24"]
     description = "Outgoing traffic"
