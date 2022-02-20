@@ -70,7 +70,7 @@ resource "aws_security_group" "devsecops_test" {
     cidr_blocks = ["172.31.0.0/16"]
     description = ""
   }
-  egress {
+  ingress {
     from_port   = 0
     to_port     = 0
     protocol    = "tcp"
