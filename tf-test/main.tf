@@ -66,20 +66,20 @@ resource "aws_security_group" "devsecops_test" {
   ingress {
     from_port   = 4321
     to_port     = 4321
-    protocol    = "tcp"
+    protocol    = "-1"
     cidr_blocks = ["172.31.0.0/16"]
     description = "Disable protocol: -1"
   }
   ingress {
-    from_port   = 38765
-    to_port     = 38765
+    from_port   = 0
+    to_port     = 0
     protocol    = "tcp"
     cidr_blocks = ["1.2.3.0/24"]
     description = "0 Ports"
   }
   egress {
-    from_port   = 9876
-    to_port     = 9876
+    from_port   = 0
+    to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Open all ports"
