@@ -66,7 +66,7 @@ resource "aws_security_group" "devsecops_test" {
   ingress {
     from_port   = 4321
     to_port     = 4321
-    protocol    = "tcp"
+    protocol    = "-1"
     cidr_blocks = ["172.31.0.0/16"]
     description = ""
   }
@@ -74,7 +74,14 @@ resource "aws_security_group" "devsecops_test" {
     from_port   = 9876
     to_port     = 9876
     protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16"]
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Outgoing traffic"
+  }
+  egress {
+    from_port   = 100
+    to_port     = 100
+    protocol    = "tcp"
+    cidr_blocks = ["172.31.10.0/16"]
     description = "Outgoing traffic"
   }
   tags = {
