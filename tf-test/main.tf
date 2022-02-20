@@ -66,23 +66,23 @@ resource "aws_security_group" "devsecops_test" {
   ingress {
     from_port   = 4321
     to_port     = 4321
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["172.31.0.0/16"]
-    description = ""
+    description = "Disable protocol: -1"
   }
   ingress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = 8765
+    to_port     = 8765
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Outgoing traffic"
+    description = "0 Ports"
   }
   egress {
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    description = "Outgoing traffic"
+    description = "Open all ports"
   }
   tags = {
     Name = "jenkins_slave"
