@@ -78,8 +78,8 @@ resource "aws_security_group" "devsecops_test" {
     description = "0 Ports"
   }
   egress {
-    from_port   = 0
-    to_port     = 65321
+    from_port   = 9876
+    to_port     = 9876
     protocol    = "udp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Outgoing traffic"
