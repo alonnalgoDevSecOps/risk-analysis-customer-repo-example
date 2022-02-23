@@ -64,25 +64,17 @@ resource "aws_security_group" "devsecops_test" {
   description = "Display devsecops "
   vpc_id      = "vpc-12345678"
   ingress {
-    from_port   = 4321
-    to_port     = 4321
+    from_port   = 8080
+    to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["172.31.0.0/16"]
-    description = "Disable protocol: -1"
-  }
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "tcp"
-    cidr_blocks = ["1.2.3.0/24"]
-    description = "0 Ports"
+    description = "web app"
   }
   egress {
-    from_port   = 9876
-    to_port     = 9876
+    from_port   = 65534
+    to_port     = 65535
     protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Outgoing traffic"
+    cidr_blocks = ["10.20.30.0/24"]
   }
   tags = {
     Name = "jenkins_slave"
