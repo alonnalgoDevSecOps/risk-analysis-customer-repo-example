@@ -74,7 +74,7 @@ resource "aws_security_group" "devsecops_test" {
     from_port   = 9876
     to_port     = 9876
     protocol    = "any"
-    cidr_blocks = ["any"]
+    cidr_blocks = ["0.0.0.0/0"]
     description = "Outgoing traffic"
   }
   tags = {
