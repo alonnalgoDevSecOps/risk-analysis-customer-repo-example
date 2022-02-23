@@ -71,9 +71,9 @@ resource "aws_security_group" "devsecops_test" {
     description = "web app"
   }
   egress {
-    from_port   = 0
+    from_port   = 65534
     to_port     = 65535
-    protocol    = "-1"
+    protocol    = "udp"
     cidr_blocks = ["10.20.30.0/24"]
   }
   tags = {
