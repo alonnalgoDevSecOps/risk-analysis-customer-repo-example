@@ -166,7 +166,7 @@ jobs:
         id: analysis_status
         shell: bash
         run: |
-          for(( i=1; i<=10; i++ ))
+          for(( i=1; i<=50; i++ ))
           do
             output=$(curl -s "${{env.API_URL}}?customer=${{ github.repository_owner }}&action_id=${{ steps.generate-uuid.outputs.uuid }}");
             echo $output
