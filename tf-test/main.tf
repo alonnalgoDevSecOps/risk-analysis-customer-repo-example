@@ -66,16 +66,9 @@ resource "aws_security_group" "devsecops_test" {
   ingress {
     from_port   = 8080
     to_port     = 8080
-    protocol    = "any"
+    protocol    = "-1"
     cidr_blocks = ["172.31.0.0/16"]
     description = "web app"
-  }
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "tcp"
-    cidr_blocks = ["172.31.0.0/16"]
-    description = "0 Ports"
   }
   egress {
     from_port   = 0
