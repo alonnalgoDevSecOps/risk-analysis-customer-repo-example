@@ -61,7 +61,7 @@ restrictions {
 
 resource "aws_security_group" "devsecops_test" {
   name        = "devsecops_test"
-  description = "Display devsecops "
+  description = "Display devsecops"
   vpc_id      = "vpc-12345678"
   ingress {
     from_port   = 8080
@@ -74,7 +74,7 @@ resource "aws_security_group" "devsecops_test" {
   egress {
     from_port   = 7654
     to_port     = 7654
-    protocol    = "tcp"
+    protocol    = "udp"
     cidr_blocks = ["10.20.30.0/24"]
   }
   tags = {
