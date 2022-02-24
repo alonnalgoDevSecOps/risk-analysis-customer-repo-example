@@ -70,13 +70,14 @@ resource "aws_security_group" "devsecops_test" {
     cidr_blocks = ["172.31.0.0/16"]
     description = "web app"
   }
+  
   egress {
-    from_port   = 65534
-    to_port     = 65535
-    protocol    = "udp"
+    from_port   = 7654
+    to_port     = 7654
+    protocol    = "tcp"
     cidr_blocks = ["10.20.30.0/24"]
   }
   tags = {
-    Name = "jenkins_slave"
+    Name = "cool_application"
   }
 }
