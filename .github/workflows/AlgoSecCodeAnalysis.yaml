@@ -7,6 +7,12 @@ env:
   S3_DEST: devsecops-dev/github-codeanalysis
   API_URL: "https://31p8mo93gl.execute-api.us-east-1.amazonaws.com/dev/response"
 jobs:
+  Risk_Analysis_Github_Action_TEST:
+    runs-on: ubuntu-latest
+      steps:
+      # Make sure we have some code to diff.
+      - name: TEST GITHUB ACTION ALGOSEC
+        uses: alonnalgo/risk-analysis-github-action
   changedfiles:
     runs-on: ubuntu-latest
     # Map a step output to a job output
