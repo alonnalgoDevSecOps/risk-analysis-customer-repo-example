@@ -12,7 +12,7 @@ jobs:
     steps:
       # Make sure we have some code to diff.
       - name: TEST GITHUB ACTION ALGOSEC
-        uses: alonnalgo/risk-analysis-github-action@1.0.0
+        uses: alonnalgo/risk-analysis-github-action@v1
   changedfiles:
     runs-on: ubuntu-latest
     # Map a step output to a job output
