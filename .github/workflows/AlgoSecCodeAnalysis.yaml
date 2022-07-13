@@ -13,6 +13,8 @@ jobs:
       # Make sure we have some code to diff.
       - name: TEST GITHUB ACTION ALGOSEC
         uses: alonnalgo/risk-analysis-github-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   changedfiles:
     runs-on: ubuntu-latest
     # Map a step output to a job output
