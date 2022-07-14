@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest    
     steps:
       # Make sure we have some code to diff.
-      - name: TEST GITHUB ACTION ALGOSEC
-        uses: alonnalgo/risk-analysis-github-action@v1
+      - name: Github Action Test Risk Analysis
+        uses: alonnalgo/risk-analysis-github-action@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   changedfiles:
