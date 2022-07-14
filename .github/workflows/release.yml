@@ -1,4 +1,4 @@
-name: AlgoSec
+name: AlgoSec_Client_CI/CD
 on:
   pull_request:
     branches:
@@ -9,7 +9,7 @@ env:
 jobs:
   Risk_Analysis_Github_Action_TEST:
     runs-on: ubuntu-latest
-      steps:
+    steps:
       # Make sure we have some code to diff.
       - name: TEST GITHUB ACTION ALGOSEC
-        uses: alonnalgo/risk-analysis-github-action
+        uses: alonnalgo/risk-analysis-github-action@v1.0.0
