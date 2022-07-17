@@ -9,14 +9,11 @@ env:
 jobs:
   Risk_Analysis_Github_Action_TEST:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkov GitHub Action
-        uses: bridgecrewio/checkov-action@v12.1347.0
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # Make sure we have some code to diff.
       - name: TEST GITHUB ACTION ALGOSEC
         uses: alonnalgo/risk-analysis-github-action@v1.0.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
