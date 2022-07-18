@@ -9,10 +9,10 @@ env:
 jobs:
   Risk_Analysis_Github_Action_TEST:
     runs-on: ubuntu-latest
-      # Make sure we have some code to diff.
-      - name: TEST GITHUB ACTION ALGOSEC
+    steps:
+      - name: TEST RISK ANALYSIS GITHUB ACTION
         uses: alonnalgo/risk-analysis-github-action@v1.0.1
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
