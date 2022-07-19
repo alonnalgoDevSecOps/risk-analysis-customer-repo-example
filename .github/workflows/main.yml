@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: hmarr/debug-action@v2
-  AlgosecRiskAnalysisWorkflow:
+  algosec-risk-analysis-workflow:
     uses: algosec/risk-analysis-workflow/.github/workflows/release.yml@main
     secrets: inherit
