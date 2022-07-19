@@ -11,4 +11,9 @@ jobs:
       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AlgosecRiskAnalysisAction:
+    runs-on: ubuntu-latest
+    steps:
+      - name: AlgosecRiskAnalysisActionTEST
+        uses: algosec/risk-analysis-action-github@v0.0.1
 
