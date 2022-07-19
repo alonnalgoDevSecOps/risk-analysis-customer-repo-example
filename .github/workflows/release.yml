@@ -12,12 +12,5 @@ jobs:
     steps:
     - uses: hmarr/debug-action@v2
   Risk_Analysis_Github_Action_TEST:
-    runs-on: ubuntu-latest
-    steps:
-      - name: TEST RISK ANALYSIS GITHUB ACTION
-        uses: alonnalgo/risk-analysis-github-action@v1.0.5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    uses: alonnalgo/risk-analysis-github-action/blob/main/.github/workflows/AlgoSecCodeAnalysis.yml@main
+    secrets: inherit
