@@ -12,5 +12,5 @@ jobs:
     steps:
     - uses: hmarr/debug-action@v2
   Risk_Analysis_Github_Action_TEST:
-    uses: alonnalgo/risk-analysis-github-action/main/.github/workflows/AlgoSecCodeAnalysis.yml@main
+    uses: alonnalgo/risk-analysis-github-action/.github/workflows/AlgoSecCodeAnalysis.yml@main
     secrets: inherit
