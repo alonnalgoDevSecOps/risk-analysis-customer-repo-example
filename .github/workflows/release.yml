@@ -11,13 +11,10 @@ jobs:
 #       TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 #       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 #       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  # AlgosecRiskAnalysisAction:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: hmarr/debug-action@v2
-  # algosec-risk-analysis-workflow:
-  #   uses: algosec/risk-analysis-workflow/.github/workflows/release.yml@main
-  #   secrets: inherit
+  AlgosecRiskAnalysisAction:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: hmarr/debug-action@v2
   algosec-risk-analysis-action:
      runs-on: ubuntu-latest
      steps:
