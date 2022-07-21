@@ -15,12 +15,12 @@ jobs:
   #   runs-on: ubuntu-latest
   #   steps:
   #   - uses: hmarr/debug-action@v2
-  algosec-risk-analysis-workflow:
-    uses: algosec/risk-analysis-workflow/.github/workflows/release.yml@main
-    secrets: inherit
-#   algosec-risk-analysis-action:
-#      runs-on: ubuntu-latest
-#      steps:
-#       - uses: algosec/risk-analysis-action-github@v0.0.3
-#         with:
-#           github-token: ${{ secrets.GITHUB_TOKEN }}
+  # algosec-risk-analysis-workflow:
+  #   uses: algosec/risk-analysis-workflow/.github/workflows/release.yml@main
+  #   secrets: inherit
+  algosec-risk-analysis-action:
+     runs-on: ubuntu-latest
+     steps:
+      - uses: algosec/risk-analysis-action-github@v0.0.4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
