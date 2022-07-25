@@ -26,7 +26,7 @@ jobs:
 #   algosec-risk-analysis-action:
 #      runs-on: ubuntu-latest
 #      steps:
-#       - uses: algosec/risk-analysis-action-github@v0.0.4
+#       - uses: algosec/risk-analysis-action-github@v0.0.6
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #         with:
