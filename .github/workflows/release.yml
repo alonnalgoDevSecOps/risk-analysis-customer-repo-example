@@ -19,7 +19,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
       - name: action-test-8
-        uses: alonnalgo/action-test-8@v0.0.1
+        uses: alonnalgo/action-test-8@v0.0.2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
