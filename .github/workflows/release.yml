@@ -18,8 +18,9 @@ jobs:
   algosec-risk-analysis-probot-action:
      runs-on: ubuntu-latest
      steps:
-      - name: github-action-test-2
-        uses: alonnalgo/github-action-test-2@v0.0.1
+      - name: typescript-action-3
+        uses: alonnalgo/typescript-action-3@v0.0.5
+        with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #   algosec-risk-analysis-action:
