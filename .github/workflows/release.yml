@@ -19,7 +19,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
       - name: typescript-action-3
-        uses: alonnalgo/typescript-action-3@v0.0.10
+        uses: alonnalgo/typescript-action-3@v0.0.11
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
