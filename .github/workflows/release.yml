@@ -22,8 +22,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: typescript-container-action
-        uses: alonnalgo/typescript-container-action@v0.0.13
-#       uses: algosec/risk-analysis-action-github@v0.0.13
+        uses: alonnalgo/typescript-container-action@v0.0.14
         env:
           GITHUB_BASE_REF: ${{ inputs.GITHUB_BASE_REF }}
           GITHUB_SHA: ${{ inputs.GITHUB_SHA }}
