@@ -19,7 +19,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
       - name: typescript-container-action
-        uses: alonnalgo/typescript-container-action@v0.0.6
+        uses: alonnalgo/typescript-container-action@v0.0.8
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
