@@ -1,6 +1,6 @@
 name: AlgoSec_Client_CI/CD
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - 'main'
 jobs:
