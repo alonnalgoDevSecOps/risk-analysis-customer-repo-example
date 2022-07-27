@@ -20,7 +20,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
       - name: typescript-container-action
-        uses: alonnalgo/typescript-container-action@v0.0.10
+        uses: alonnalgo/typescript-container-action@master
 #       uses: algosec/risk-analysis-action-github@v0.0.8
         
         with:
