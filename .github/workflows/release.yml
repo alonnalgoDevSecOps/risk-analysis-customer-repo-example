@@ -22,9 +22,13 @@ jobs:
       - name: typescript-container-action
         uses: alonnalgo/typescript-container-action@v0.0.13
 #       uses: algosec/risk-analysis-action-github@v0.0.13
-        
+        env:
+          GITHUB_BASE_REF: ${{ inputs.GITHUB_BASE_REF }}
+          GITHUB_SHA: ${{ inputs.GITHUB_SHA }}
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_BASE_REF: ${{ inputs.GITHUB_BASE_REF }}
+          GITHUB_SHA: ${{ inputs.GITHUB_SHA }}
           TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
