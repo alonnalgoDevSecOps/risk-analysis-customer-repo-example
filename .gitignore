@@ -1,1 +1,5 @@
 .history
+my.env
+my.secrets
+pr-diff.json
+pull-request.json
