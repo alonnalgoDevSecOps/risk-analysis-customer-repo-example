@@ -19,6 +19,8 @@ jobs:
   algosec-risk-analysis-action:
      runs-on: ubuntu-latest
      steps:
+      - name: debug
+        uses: hmarr/debug-action@v2
       - name: checkout repo
         uses: actions/checkout@v3
       - name: typescript-container-action
