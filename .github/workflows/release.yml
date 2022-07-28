@@ -25,14 +25,12 @@ jobs:
         uses: actions/checkout@v3
       - name: typescript-container-action
         uses: alonnalgo/typescript-container-action@v0.0.16
-        env:
-          GITHUB_BASE_REF: ${{ inputs.GITHUB_BASE_REF }}
-          GITHUB_SHA: ${{ inputs.GITHUB_SHA }}
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_BASE_REF: ${{ inputs.GITHUB_BASE_REF }}
-          GITHUB_SHA: ${{ inputs.GITHUB_SHA }}
-          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_BASE_REF: ${{ github.base_ref }}
+          GH_SHA: ${{ githuba.sha }}
+          TF_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          TF_VERSION: '1.2.5'
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 
