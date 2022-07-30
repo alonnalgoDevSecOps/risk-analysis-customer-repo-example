@@ -1,4 +1,4 @@
-name: AlgoSec_Client_CI/CD
+name: 'AlgoSec Customer CI/CD Workflow'
 on:
   pull_request:
     branches:
