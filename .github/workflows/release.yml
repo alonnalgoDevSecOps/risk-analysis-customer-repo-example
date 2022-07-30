@@ -18,14 +18,14 @@ jobs:
 
   algosec-risk-analysis-action:
      runs-on: ubuntu-latest
-     name: 'Algosec Risk Analysis'
+     name: 'Algosec Risk Analysis Test'
      steps:
       - name: debug
         uses: hmarr/debug-action@v2
       - name: checkout repo
         uses: actions/checkout@v3
       - name: 'Docker Action'
-        uses: alonnalgo/docker-action@v0.0.3
+        uses: alonnalgo/docker-action@v0.0.2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_BASE_REF: ${{ github.base_ref }}
