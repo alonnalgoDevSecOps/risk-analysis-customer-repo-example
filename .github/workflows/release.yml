@@ -26,10 +26,10 @@ jobs:
       - name: 'Docker Action'
         uses: alonnalgo/docker-action@v0.0.1
         with:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_BASE_REF: ${{ github.base_ref }}
-          GH_SHA: ${{ github.sha }}
-          TF_TOKEN: ${{ secrets.TF_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          GITHUB_SHA: ${{ github.sha }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
           TF_VERSION: '1.2.5'
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
