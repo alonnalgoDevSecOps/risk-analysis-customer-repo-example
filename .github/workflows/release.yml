@@ -6,6 +6,7 @@ on:
 jobs:
  
   changedfiles:
+    name: 'Scan code changes'
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:
@@ -64,6 +65,7 @@ jobs:
         run: echo ${{ needs.changedfiles.outputs.matrix }}
 
   algosec-risk-analysis-action:
+     name: 'Algosec Risk Analysis Test'
      runs-on: ubuntu-latest
      needs: changedfiles
      strategy:
@@ -71,7 +73,6 @@ jobs:
      defaults:
       run:
         working-directory: ${{ matrix.folder }}
-     name: 'Algosec Risk Analysis Test'
      steps:
       - name: debug
         uses: hmarr/debug-action@v2
