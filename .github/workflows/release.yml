@@ -89,7 +89,7 @@ jobs:
 #         with:
 #           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
       - name: 'Typescript Risk Analysis Action'
-        uses: alonnalgo/action-test@v0.0.14
+        uses: alonnalgo/action-test@v0.0.15
 
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
