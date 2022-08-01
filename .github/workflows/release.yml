@@ -79,7 +79,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: 'Docker Action'
-        uses: alonnalgo/action-test@v0.0.6
+        uses: alonnalgo/action-test@v0.0.7
 
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
