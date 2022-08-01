@@ -156,7 +156,7 @@ resource "aws_security_group" "jenkins_master2" {
   description = "Access rules for Jenkins server 2"
   vpc_id      = "vpc-236cde59"
   ingress {
-    from_port   = 7080
+    from_port   = 6080
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = var.users_external_ips2
