@@ -65,7 +65,7 @@ jobs:
 #         run: echo ${{ needs.changedfiles.outputs.matrix }}
 
   algosec-risk-analysis-action:
-     name: 'Algosec Risk Analysis Test'
+     name: 'Algosec Risk Analysis Test Job'
      runs-on: ubuntu-latest
 #      needs: changedfiles
 #      strategy:
@@ -88,7 +88,7 @@ jobs:
 #         uses: hashicorp/setup-terraform@v1
 #         with:
 #           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
-      - name: 'Typescript Risk Analysis Action'
+      - name: 'Algosec Risk Analysis Action'
         uses: alonnalgo/action-test@v0.0.26
 
         with:
