@@ -19,7 +19,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-west-2
       - name: 'Algosec Risk Analysis Action'
-        uses: alonnalgo/action-test@v0.0.31
+        uses: alonnalgo/action-test@v0.0.32
 
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
