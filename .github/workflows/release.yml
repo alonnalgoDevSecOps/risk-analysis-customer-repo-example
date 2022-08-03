@@ -1,4 +1,4 @@
-name: 'Customer's Repo CI/CD Workflow'
+name: 'Customer Repo CI/CD'
 on:
   pull_request:
     branches:
@@ -20,7 +20,6 @@ jobs:
           aws-region: us-west-2
       - name: 'Algosec Risk Analysis Action'
         uses: alonnalgo/action-test@v0.0.34
-
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_BASE_REF: ${{ github.base_ref }}
