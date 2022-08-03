@@ -8,10 +8,10 @@ jobs:
      name: 'Algosec Risk Analysis Test Job'
      runs-on: ubuntu-latest
      steps:
-      - name: debug
-        uses: hmarr/debug-action@v2
-      - name: checkout repo
-        uses: actions/checkout@v3
+#       - name: debug
+#         uses: hmarr/debug-action@v2
+#       - name: checkout repo
+#         uses: actions/checkout@v3
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
