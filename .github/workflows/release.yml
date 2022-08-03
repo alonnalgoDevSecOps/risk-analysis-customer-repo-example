@@ -11,7 +11,7 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v3
       - name: 'Algosec Risk Analysis Action'
-        uses: alonnalgo/action-test@v0.0.43
+        uses: alonnalgo/action-test@v0.0.44
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
