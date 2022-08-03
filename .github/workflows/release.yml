@@ -8,22 +8,15 @@ jobs:
      name: 'Algosec Risk Analysis Test Job'
      runs-on: ubuntu-latest
      steps:
-#       - name: debug
-#         uses: hmarr/debug-action@v2
       - name: checkout repo
         uses: actions/checkout@v3
-#       - name: Configure AWS Credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: us-west-2
       - name: 'Algosec Risk Analysis Action'
-        uses: alonnalgo/action-test@v0.0.39
+        uses: alonnalgo/action-test@v0.0.40
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_REGION: us-west-2
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_BASE_REF: ${{ github.base_ref }}
