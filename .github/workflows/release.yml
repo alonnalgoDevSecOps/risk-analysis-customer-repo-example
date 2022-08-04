@@ -6,11 +6,8 @@ on:
 jobs:
   algosec-risk-analysis-job:
      name: 'Algosec Risk Analysis Job'
-     runs-on: ubuntu-latest
-     steps:
-      - name: 'Algosec Risk Analysis Action'
-        uses: alonnalgo/action-test@v0.0.51
-        env:
+     runs-on: alonnalgo/action-test@v0.0.51
+     env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_SHA: ${{ github.sha }}
           GITHUB_WORKSPACE: ${{ github.workspace }}
