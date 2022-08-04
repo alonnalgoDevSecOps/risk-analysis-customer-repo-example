@@ -9,7 +9,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
         - name: 'Algosec Risk Analysis Action'
-          run: alonnalgo/test-action@0.0.51
+          run: alonnalgo/risk-analysis-action@0.0.51
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
@@ -19,7 +19,6 @@ jobs:
             AWS_REGION: us-west-2
             AWS_S3: ${{ secrets.AWS_S3 }}
             RA_API_URL: ${{ secrets.RA_API_URL }}
-            TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
           
           
