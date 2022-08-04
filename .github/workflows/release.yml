@@ -6,17 +6,20 @@ on:
 jobs:
   algosec-risk-analysis-job:
      name: 'Algosec Risk Analysis Job'
-     runs-on: alonnalgo/action-test@v0.0.51
-     env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_SHA: ${{ github.sha }}
-          GITHUB_WORKSPACE: ${{ github.workspace }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_REGION: us-west-2
-          AWS_S3: ${{ secrets.AWS_S3 }}
-          RA_API_URL: ${{ secrets.RA_API_URL }}
-          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+     runs-on: ubuntu-latest
+     steps:
+        - name: 'Algosec Risk Analysis Action'
+          run: alonnalgo/test-action@0.0.51
+          env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            GITHUB_SHA: ${{ github.sha }}
+            GITHUB_WORKSPACE: ${{ github.workspace }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_REGION: us-west-2
+            AWS_S3: ${{ secrets.AWS_S3 }}
+            RA_API_URL: ${{ secrets.RA_API_URL }}
+            TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
 
           
           
