@@ -11,7 +11,7 @@ jobs:
 #         - name: Checkout Repository
 #           uses: actions/checkout@v2
         - name: Algosec Risk Analysis Action
-          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.4
+          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.5
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
