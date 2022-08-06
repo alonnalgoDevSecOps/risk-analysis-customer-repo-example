@@ -13,9 +13,7 @@ jobs:
         - name: Algosec Risk Analysis Action
           uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.3
           env:
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
             GITHUB_WORKSPACE: ${{ github.workspace }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
