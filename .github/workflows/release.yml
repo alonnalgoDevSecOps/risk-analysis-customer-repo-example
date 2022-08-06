@@ -8,6 +8,8 @@ jobs:
      name: 'Algosec Risk Analysis'
      runs-on: ubuntu-latest
      steps:
+        - name: Checkout
+          uses: actions/checkout@v2.4.2
         - name: Algosec Risk Analysis Action
           uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.1
           env:
