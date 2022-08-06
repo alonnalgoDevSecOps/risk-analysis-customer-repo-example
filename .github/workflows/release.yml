@@ -8,10 +8,10 @@ jobs:
      name: 'Algosec Risk Analysis'
      runs-on: ubuntu-latest
      steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v2
+#         - name: Checkout Repository
+#           uses: actions/checkout@v2
         - name: Algosec Risk Analysis Action
-          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.3
+          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.4
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
