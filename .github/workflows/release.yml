@@ -8,12 +8,10 @@ jobs:
      name: 'Algosec Risk Analysis'
      runs-on: ubuntu-latest
      steps:
-        - name: debug
-          uses: hmarr/debug-action@v2
-        - name: checkout
+        - name: Checkout Repository
           uses: actions/checkout@v2
         - name: Algosec Risk Analysis Action
-          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.2
+          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.3
           env:
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
