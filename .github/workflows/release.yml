@@ -10,13 +10,10 @@ jobs:
      steps:
         - name: debug
           uses: hmarr/debug-action@v2
-#         - name: Checkout
-#           uses: actions/checkout@v2.4.2
         - name: Algosec Risk Analysis Action
           uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.2
           env:
             TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
             GITHUB_WORKSPACE: ${{ github.workspace }}
