@@ -22,6 +22,16 @@ jobs:
             AWS_S3: ${{ secrets.AWS_S3 }}
             RA_API_URL: ${{ secrets.RA_API_URL }}
             TF_VERSION: '1.2.0'
+  checkov-test-job:
+    name: 'test job'
+    runs-on: ubuntu-latest
+    steps:
+    - name: test checkov
+      uses: skyfjell/tf-checkov-action@latest
+      with:
+        terraform_token: ${{ secrets.TF_API_TOKEN }}
+  
+      
 
           
           
