@@ -21,6 +21,7 @@ jobs:
             AWS_REGION: us-west-2
             AWS_S3: ${{ secrets.AWS_S3 }}
             RA_API_URL: ${{ secrets.RA_API_URL }}
+            TF_VERSION: '1.2.0'
 
           
           
