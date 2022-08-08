@@ -11,7 +11,7 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.6
+          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.7
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
@@ -21,6 +21,7 @@ jobs:
             AWS_REGION: us-west-2
             AWS_S3: ${{ secrets.AWS_S3 }}
             RA_API_URL: ${{ secrets.RA_API_URL }}
+            TF_VERSION: '1.2.0'
 
           
           
