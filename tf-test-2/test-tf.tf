@@ -3,8 +3,6 @@ provider "aws" {
   version = "~> 2.0"
   region = "us-east-1"
   alias="east1"
-  access_key = "AKIAXN5RHA6V72BJBJNF"
-  secret_key = "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"
 }
 
 
