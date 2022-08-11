@@ -11,7 +11,7 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.11
+          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.12
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
