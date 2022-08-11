@@ -21,6 +21,10 @@ jobs:
             AWS_REGION: us-west-2
             AWS_S3: ${{ secrets.AWS_S3 }}
             RA_API_URL: ${{ secrets.RA_API_URL }}
+            TENANT_ID: ${{ secrets.TENANT_ID }}
+            CF_LOGIN_API: ${{ secrets.CF_LOGIN_API }}
+            CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
+            CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
 
           
           
