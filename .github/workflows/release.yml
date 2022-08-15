@@ -11,7 +11,7 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.20
+          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.25
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -25,3 +25,5 @@ jobs:
             CF_LOGIN_API: ${{ secrets.CF_LOGIN_API }}
             CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
             CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
+            FRAMEWORK_TYPE: terraform
+            VCS_TYPE: github
