@@ -75,7 +75,7 @@ resource "aws_security_group" "devsecops_test" {
     from_port   = 7654
     to_port     = 7655
     protocol    = "tcp"
-    cidr_blocks = ["10.20.30.0/24"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
     Name = "cool_application"
