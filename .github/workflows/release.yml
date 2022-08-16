@@ -11,16 +11,14 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.25
+          uses: alonnalgoDevSecOps/risk-analysis-action@v0.0.27
           env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             GITHUB_SHA: ${{ github.sha }}
             GITHUB_WORKSPACE: ${{ github.workspace }}
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            RA_API_URL: ${{ secrets.RA_API_URL }}
-            SI_API_URL: ${{ secrets.SI_API_URL }}
+            API_URL: ${{ secrets.API_URL }}
             TENANT_ID: ${{ secrets.TENANT_ID }}
             CF_LOGIN_API: ${{ secrets.CF_LOGIN_API }}
             CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
