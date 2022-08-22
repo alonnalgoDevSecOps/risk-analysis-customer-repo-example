@@ -16,7 +16,6 @@ provider "aws" {
 }
 
 provider "google" {
-  credentials = file("cloudflow-qa-gcp1-90070c4eeb3d.json")
   project     = "cloudflow-qa-gcp1"
 }
 
