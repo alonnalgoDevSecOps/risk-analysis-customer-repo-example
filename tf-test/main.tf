@@ -17,6 +17,8 @@ provider "aws" {
 
 provider "google" {
   project     = "cloudflow-qa-gcp1"
+  region  = "us-east1"
+  zone    = "us-east1-c"
 }
 
 variable "for_test" {
