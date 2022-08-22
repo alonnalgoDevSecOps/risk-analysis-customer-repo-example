@@ -20,8 +20,8 @@ jobs:
             AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
             CF_API_URL: ${{ secrets.API_URL }}
-            CF_TENANT_ID: ${{ secrets.TENANT_ID }}
             CF_LOGIN_API: ${{ secrets.CF_LOGIN_API }}
+            CF_TENANT_ID: ${{ secrets.TENANT_ID }}
             CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
             CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
             FRAMEWORK_TYPE: terraform
