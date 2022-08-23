@@ -9,7 +9,7 @@ jobs:
      runs-on: ubuntu-latest
      steps:
         - name: Algosec Risk Analysis Action
-          uses: algosec/risk-analysis-action@v0.0.5
+          uses: algosec/risk-analysis-action@v0.0.1
           env:
 
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
