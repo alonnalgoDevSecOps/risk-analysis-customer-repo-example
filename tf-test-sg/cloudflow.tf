@@ -280,7 +280,7 @@ resource "aws_security_group" "EKS-dev-demo-cluster-SG-new" {
     cidr_blocks = ["0.0.0.0/0"]
     description = "Allow workstation to communicate with the cluster API Server"
     from_port   = 443
-    protocol    = "tcp"
+    protocol    = "-1"
     to_port     = 443
   }
 }
