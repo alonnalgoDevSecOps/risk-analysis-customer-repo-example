@@ -272,7 +272,7 @@ resource "aws_security_group" "EKS-dev-demo-cluster-SG-new" {
   ingress {
     description     = "Allow pods to communicate with the cluster API Server"
     from_port       = 443
-    protocol        = "tcp"
+    protocol        = "-1"
     security_groups = ["sg-0e37bcea696f6363e"]
     to_port         = "443"
   }
