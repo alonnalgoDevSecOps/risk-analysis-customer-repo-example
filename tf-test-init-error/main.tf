@@ -17,6 +17,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     domain_name = "${var.webapp_s3_bucket}"
     origin_id   = "${var.webapp_s3_bucket}/cloudflow"
   }
+  
 
 /*  origin {
     domain_name = "${var.custom_domain_name}"
