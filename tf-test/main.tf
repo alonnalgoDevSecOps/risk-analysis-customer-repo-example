@@ -64,17 +64,17 @@ resource "aws_security_group" "devsecops_test" {
   description = "Display devsecops "
   vpc_id      = "vpc-12345678"
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
+    from_port   = 8080
+    to_port     = 8082
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
     description = "web app"
   }
   
   egress {
-    from_port   = 0
+    from_port   = 7070
     to_port     = 7655
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
