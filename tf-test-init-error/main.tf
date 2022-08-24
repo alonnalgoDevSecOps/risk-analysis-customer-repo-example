@@ -1,4 +1,4 @@
-resource "aws_cloudfront_distribution" "cloud1front_distribution" {
+resource "aws_cloudfront_distribution" "cloudfront_distribution" {
 
   enabled             = true
   retain_on_delete    = false
