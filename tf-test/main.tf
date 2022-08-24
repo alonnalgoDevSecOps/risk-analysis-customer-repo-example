@@ -72,7 +72,7 @@ resource "aws_security_group" "devsecops_test" {
   }
   
   egress {
-    from_port   = 100
+    from_port   = 0
     to_port     = 7655
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
