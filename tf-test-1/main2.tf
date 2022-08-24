@@ -1,5 +1,5 @@
 
-resource "aws_cloudfront_distribution" "cloudfront_distribution1" {
+resource "aws_cloudfront_distribution" "cloudfront_distribution2" {
 
   enabled             = true
   retain_on_delete    = false
@@ -51,7 +51,7 @@ restrictions {
   }
 }
 
-resource "aws_security_group" "devsecops_test1" {
+resource "aws_security_group" "devsecops_test2" {
   name        = "devsecops_test"
   description = "Display devsecops "
   vpc_id      = "vpc-12345678"
