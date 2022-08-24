@@ -23,6 +23,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     origin_id = "${var.custom_domain_name}/cloudflow"
     origin_path = "${var.origin_path}"
 
+  
     custom_origin_config {
       origin_protocol_policy = "https-only"
       http_port = "80"
