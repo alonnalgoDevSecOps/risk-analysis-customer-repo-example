@@ -67,7 +67,7 @@ resource "aws_security_group" "devsecops_test" {
     from_port   = 8080
     to_port     = 8082
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["10.20.30.40/16"]
     description = "web app"
   }
   
@@ -75,7 +75,7 @@ resource "aws_security_group" "devsecops_test" {
     from_port   = 7070
     to_port     = 7655
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["10.20.30.40/16"]
   }
   tags = {
     Name = "cool_application"
