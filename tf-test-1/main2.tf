@@ -52,7 +52,7 @@ restrictions {
 }
 
 resource "aws_security_group" "devsecops_test2" {
-  name        = "devsecops_test"
+  name        = "devsecops_test1"
   description = "Display devsecops "
   vpc_id      = "vpc-12345678"
   ingress {
