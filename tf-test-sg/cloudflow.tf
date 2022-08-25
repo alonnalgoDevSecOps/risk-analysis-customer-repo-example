@@ -7,6 +7,7 @@ terraform {
   }
 }
 
+
 variable "for_test" {
   type    = string
   default= "test"
