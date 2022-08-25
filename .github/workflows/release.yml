@@ -5,13 +5,13 @@ on:
       - 'main'
 jobs:
   algosec-risk-analysis:
-     name: 'Algosec Risk Analysis'
+     name: 'Algosec IAC Connectivity Risk Analysis'
      runs-on: ubuntu-latest
      steps:
         - name: debug
           uses: hmarr/debug-action@v2
-        - name: Algosec Risk Analysis Action
-          uses: algosec/risk-analysis-action@v0.0.2
+        - name: IAC Connectivity Risk Analysis
+          uses: algosec/risk-analysis-action@v0.0.3
           env:
             MODE: continue_on_error
             FRAMEWORK_TYPE: terraform
