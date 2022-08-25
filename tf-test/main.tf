@@ -46,7 +46,7 @@ resource "aws_cloudfront_distribution" "cloudfront1_distribution" {
     max_ttl                = var.max_ttl
   }
 
-restrictions {
+  restrictions {
     geo_restriction {
       restriction_type = var.restriction_type
       locations        = var.locations
@@ -70,7 +70,7 @@ resource "aws_security_group" "devsecops_test" {
     cidr_blocks = ["172.31.0.0/16"]
     description = "web app"
   }
-  
+
   egress {
     from_port   = 7654
     to_port     = 7655
