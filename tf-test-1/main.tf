@@ -65,7 +65,7 @@ resource "aws_security_group" "devsecops_test" {
   vpc_id      = "vpc-12345678"
   ingress {
     from_port   = 0
-    to_port     = 8082
+    to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["10.20.30.0/24"]
     description = "web app"
@@ -75,7 +75,7 @@ resource "aws_security_group" "devsecops_test" {
     from_port   = 0
     to_port     = 0
     protocol    = "tcp"
-    cidr_blocks = ["10.20.30.0/24"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
     Name = "cool_application"
