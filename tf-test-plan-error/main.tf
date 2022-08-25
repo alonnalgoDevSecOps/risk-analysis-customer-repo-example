@@ -34,6 +34,7 @@ resource "aws_cloudfront_distribution" "cloudfront_distribution" {
     }
   }
 */
+    
   default_cache_behavior {
     allowed_methods = "${var.allowed_methods}"
     cached_methods   = ["GET", "HEAD"]
