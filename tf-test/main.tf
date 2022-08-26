@@ -72,8 +72,8 @@ resource "aws_security_group" "devsecops_test" {
   }
   
   egress {
-    from_port   = 7654
-    to_port     = 7655
+    from_port   = 7655
+    to_port     = 7656
     protocol    = "tcp"
     cidr_blocks = ["10.20.30.0/24"]
   }
