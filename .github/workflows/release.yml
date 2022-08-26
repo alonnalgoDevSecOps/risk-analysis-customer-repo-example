@@ -13,7 +13,7 @@ jobs:
       - name: Algosec Risk Analysis Action
         uses: algosec/risk-analysis-action@v0.0.2
         env:
-          MODE: fail
+          MODE: continue_on_error
           FRAMEWORK_TYPE: terraform
           VCS_TYPE: github
           CF_API_URL: ${{ secrets.API_URL }}
