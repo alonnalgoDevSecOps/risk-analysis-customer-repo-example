@@ -11,7 +11,7 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: algosec/risk-analysis-action@v0.0.3
+          uses: algosec/risk-analysis-action@v0.0.4
           env:
             MODE: continue_on_error
             FRAMEWORK_TYPE: terraform
