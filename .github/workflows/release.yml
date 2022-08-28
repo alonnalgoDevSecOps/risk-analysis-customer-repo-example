@@ -11,6 +11,8 @@ jobs:
       contents: 'read'
       id-token: 'write'
      steps:
+        - name: 'checkout'
+          uses: actions/checkout@v2
         - name: 'auth'
           uses: 'google-github-actions/auth@v0'
           with:
@@ -25,6 +27,7 @@ jobs:
         - name: Algosec Risk Analysis Action
           uses: algosec/risk-analysis-action@v0.0.2
           env:
+            USE_CHECKOUT: true
             MODE: continue_on_error
             FRAMEWORK_TYPE: terraform
             VCS_TYPE: github
