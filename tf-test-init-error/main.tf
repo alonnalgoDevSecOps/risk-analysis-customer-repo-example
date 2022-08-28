@@ -1,5 +1,4 @@
 resource "aws_cloudfront_distribution" "cloudfront_distribution" {
-
   enabled             = true
   retain_on_delete    = false
   is_ipv6_enabled     = false
