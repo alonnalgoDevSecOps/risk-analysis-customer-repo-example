@@ -8,11 +8,23 @@ jobs:
      name: 'Algosec Risk Analysis'
      runs-on: ubuntu-latest
      steps:
+        - name: 'checkout'
+          uses: actions/checkout@v3
+        - name: Authenticate to Google Cloud
+          uses: google-github-actions/auth@v0.7.3
+          with:
+            credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+        - name: 'Set up Cloud SDK'
+          uses: 'google-github-actions/setup-gcloud@v0'
+    
+        - name: 'Use gcloud CLI'
+          run: 'gcloud info'
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
           uses: algosec/risk-analysis-action@v0.0.4
           env:
+            USE_CHECKOUT: true
             MODE: continue_on_error
             FRAMEWORK_TYPE: terraform
             VCS_TYPE: github
