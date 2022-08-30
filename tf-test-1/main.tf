@@ -7,7 +7,7 @@ variable "for_test" {
   default = "test"
 }
 
-resource "aws_cloudfront_distribution" "cloudfront_distribution" {
+resource "aws_cloudfront_distribution" "cloudfront_distribution1" {
 
   enabled             = true
   retain_on_delete    = false
