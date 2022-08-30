@@ -11,9 +11,9 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: algosec/risk-analysis-action@v0.0.5
+          uses: algosec/risk-analysis-action@v0.0.3
           env:
-            MODE: fail
+            MODE: continue_on_error
             FRAMEWORK_TYPE: terraform
             VCS_TYPE: github
             CF_API_URL: ${{ secrets.API_URL }}
