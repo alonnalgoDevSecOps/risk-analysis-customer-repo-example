@@ -24,7 +24,7 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: algosec/risk-analysis-action@v0.0.6
+          uses: algosec/connectivity-risk-analysis-action@v0.0.6
           env:
             USE_CHECKOUT: true
             MODE: continue_on_error
