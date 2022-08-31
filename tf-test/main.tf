@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.16"
     }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=3.0.0"
+    }
   }
 }
 
@@ -16,9 +20,12 @@ provider "aws" {
 }
 
 provider "google" {
-  project     = "cloudflow-qa-gcp1"
+  project = "cloudflow-qa-gcp1"
   region  = "us-east1"
   zone    = "us-east1-c"
+}
+provider "azurerm" {
+  features {}
 }
 
 variable "for_test" {
@@ -602,3 +609,65 @@ resource "google_compute_network" "network-with-disabled-rule" {
 
 
 ########################### GCP End ############################
+########################### Azure Start ############################
+resource "azurerm_resource_group" "example" {
+  name     = "devsecops-resources"
+  location = "East US"
+}
+
+resource "azurerm_virtual_network" "example" {
+  name                = "devsecops-network"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+  address_space       = ["10.0.0.0/16"]
+}
+
+resource "azurerm_subnet" "example" {
+  name                 = "internal"
+  virtual_network_name = azurerm_virtual_network.example.name
+  resource_group_name  = azurerm_resource_group.example.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
+
+resource "azurerm_network_security_group" "example" {
+  name                = "devsecops-nsg"
+  resource_group_name = azurerm_resource_group.example.name
+  location            = azurerm_resource_group.example.location
+}
+
+resource "azurerm_network_security_group" "example2" {
+  name                = "acceptanceTestSecurityGroup1"
+  location            = azurerm_resource_group.example.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  security_rule {
+    name                       = "test1234"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  tags = {
+    environment = "Production"
+  }
+}
+resource "azurerm_network_security_rule" "testrules" {
+  for_each                    = local.nsgrules
+  name                        = each.key
+  direction                   = each.value.direction
+  access                      = each.value.access
+  priority                    = each.value.priority
+  protocol                    = each.value.protocol
+  source_port_range           = each.value.source_port_range
+  destination_port_range      = each.value.destination_port_range
+  source_address_prefix       = each.value.source_address_prefix
+  destination_address_prefix  = each.value.destination_address_prefix
+  resource_group_name         = azurerm_resource_group.example.name
+  network_security_group_name = azurerm_network_security_group.example.name
+}
+########################### Azure End ############################
