@@ -105,3 +105,7 @@ variable "webapp_s3_bucket" {
   description = "S3 bucket name for webapp deploy"
   default     = "this-is-a-test"
 }
+variable "test" {
+  description = "tes test"
+  default     = "this-is-a-test"
+}
