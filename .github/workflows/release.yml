@@ -30,7 +30,7 @@ jobs:
             MODE: continue_on_error
             FRAMEWORK_TYPE: terraform
             VCS_TYPE: github
-            CF_API_URL: https://api-feature-cs-0015342.dev.cloudflow.algosec.com/cloudflow/api/devsecops-sara/v1
+            CF_API_URL: https://api-feature-cs-0015342.dev.cloudflow.algosec.com/cloudflow/api/devsecops-sara/v1/
             CF_LOGIN_API: ${{ secrets.CF_LOGIN_API }}
             CF_TENANT_ID: ${{ secrets.TENANT_ID }}
             CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
