@@ -116,7 +116,7 @@ resource "aws_security_group" "jenkins_master1" {
   ingress {
     from_port   = 3422
     to_port     = 3422
-    protocol    = "-1"
+    protocol    = "tcp"
     cidr_blocks = var.offices_external_ips
     description = "Ssh port 3422"
   }
@@ -182,7 +182,7 @@ resource "aws_security_group" "jenkins_slave" {
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "tcp"
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
     description = "Outgoing traffic"
   }
