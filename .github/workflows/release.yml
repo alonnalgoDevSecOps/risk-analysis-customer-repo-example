@@ -24,10 +24,10 @@ jobs:
         - name: debug
           uses: hmarr/debug-action@v2
         - name: Algosec Risk Analysis Action
-          uses: algosec/connectivity-risk-analysis-action@v0.0.14
+          uses: algosec/connectivity-risk-analysis-action@v0.0.12
           env:
             USE_CHECKOUT: true
-            STOP_WHEN_FAIL: true
+            MODE: continue_on_error
             FRAMEWORK_TYPE: terraform
             VCS_TYPE: github
             CF_API_URL: https://2dpfcp2m3c.execute-api.us-east-1.amazonaws.com/dev/cloudflow/api/devsecops-sara/v1
