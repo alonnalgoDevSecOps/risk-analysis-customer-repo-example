@@ -27,7 +27,7 @@ jobs:
           uses: algosec/connectivity-risk-analysis-action@v0.0.14
           env:
             USE_CHECKOUT: true
-            MODE: continue_on_error
+            STOP_WHEN_FAIL: true
             FRAMEWORK_TYPE: terraform
             VCS_TYPE: github
             CF_API_URL: https://2dpfcp2m3c.execute-api.us-east-1.amazonaws.com/dev/cloudflow/api/devsecops-sara/v1
