@@ -522,7 +522,7 @@ resource "google_compute_firewall" "risk-to-rule1" {
   name          = "risk-to-rule1"
   network       = "terraform-network"
   direction     = "INGRESS"
-  source_ranges = ["192.168.1.1/32"]
+  source_ranges = ["192.168.1.1/33"]
   allow {
     protocol = "all"
   }
