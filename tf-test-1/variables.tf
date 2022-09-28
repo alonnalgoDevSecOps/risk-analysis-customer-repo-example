@@ -1,5 +1,5 @@
 variable "custom_domain_name" {
-  description = "The domain name of the bucket using the s3 endpoint of the bucket's region"
+  description = "The domain name of the bucket using the s3 endpoint of the bucket's region adsfasd"
   default     = "test-bucket"
 }
 
