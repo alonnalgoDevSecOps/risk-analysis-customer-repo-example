@@ -78,6 +78,6 @@ resource "aws_security_group" "devsecops_test" {
     cidr_blocks = ["10.20.30.0/24"]
   }
   tags = {
-    Name = "cool_application"
+    Name = "cool_application1"
   }
 }
