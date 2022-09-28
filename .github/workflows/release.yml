@@ -15,7 +15,7 @@ jobs:
           with:
             credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
         - name: Algosec IaC Connectivity Risk Analysis
-          uses: algosec/connectivity-risk-analysis-action@v0.0.21
+          uses: algosec/connectivity-risk-analysis-action@v0.0.22
           env:
             USE_CHECKOUT: true
             CF_TENANT_ID: ${{ secrets.CF_TENANT_ID }}
