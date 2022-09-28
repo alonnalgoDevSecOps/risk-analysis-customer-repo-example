@@ -1,4 +1,4 @@
-name: 'Customer Repo CI/CD'
+name: 'Algosec Risk Analysis'
 on:
   pull_request:
     branches:
