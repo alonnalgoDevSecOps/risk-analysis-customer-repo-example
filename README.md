@@ -1,6 +1,3 @@
-
-[![AlgoSec Actions status](https://github.com/risk-analysis-customer-repo-example
-/checkpullrequest/workflows/AlgoSec/badge.svg)](https://github.com/risk-analysis-customer-repo-example
-/checkpullrequest/actions)
+![workflow status](https://github.com/alonnalgoDevSecOps/risk-analysis-customer-repo-example/actions/workflows/release.yml/badge.svg)
 
 This cute repo has been created to demonstrate the AlgoSec's DevSecOps Solution
